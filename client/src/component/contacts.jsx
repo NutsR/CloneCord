@@ -5,7 +5,6 @@ function Contacts() {
 	const { user } = useUser();
 	const [contacts, setContacts] = useState([]);
 	socket.on("users", (users) => {
-		console.log(users);
 		setContacts(users);
 	});
 	return (

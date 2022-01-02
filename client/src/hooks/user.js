@@ -21,7 +21,8 @@ function UserProvider({ children }) {
 		const data = await res.json();
 
 		if (data.id) {
-			socket.auth = { username: data.username };
+			const sessionID = localStorage.getItem(`${data.username}`);
+			socket.auth = { username: data.username, sessionID: sessionID };
 			socket.connect();
 			setUser(data);
 		}
@@ -30,18 +31,7 @@ function UserProvider({ children }) {
 		socket.on("connect", () => {
 			setUser((u) => ({ ...u, socket_id: "" }));
 		});
-		socket.on("session", ({ sessionID, userID }) => {
-			const existingSession = localStorage.getItem("sessionID");
-			console.log(existingSession);
-			if (!existingSession) {
-				localStorage.setItem("sessionID", sessionID);
-				socket.auth = { sessionID };
-				socket.userID = userID;
-				setUser((u) => ({ ...u, socket_id: userID }));
-			}
-			setUser((u) => ({ ...u, socket_id: userID }));
-			socket.auth = { sessionID: existingSession };
-		});
+
 		checkLogin();
 	}, []);
 	return (

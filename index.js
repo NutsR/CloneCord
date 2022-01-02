@@ -10,7 +10,7 @@ const session = require("express-session");
 const cors = require("cors");
 const app = express();
 const server = http.createServer(app);
-const registerRoutes = require("./router/register");
+const registerRoutes = require("./router/register-login");
 const userRoutes = require("./router/user");
 const { InMemorySessionStore } = require("./utils/sessionStore");
 const crypto = require("crypto");
@@ -62,7 +62,7 @@ if (process.env.NODE_ENV === "production") {
 }
 app.use("/api", registerRoutes, userRoutes);
 io.use((socket, next) => {
-	const sessionID = socket.handshake.auth.sessionId;
+	const sessionID = socket.handshake.auth.sessionID;
 	if (sessionID) {
 		const session = sessionStore.findSession(sessionID);
 		if (session) {
@@ -79,10 +79,11 @@ io.use((socket, next) => {
 	socket.sessionID = randomID();
 	socket.userID = randomID();
 	socket.username = username;
+	console.log(socket.sessionID);
 	next();
 });
 io.on("connection", (socket) => {
-	sessionStore.saveSession(socket.sessionID, {
+	sessionStore.saveSession(socket.handshake.auth.sessionID, {
 		userID: socket.userID,
 		username: socket.username,
 		connected: true,

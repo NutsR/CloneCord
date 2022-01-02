@@ -9,7 +9,7 @@ function Login() {
 	};
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		const res = await fetch("http://localhost:3001/api/login", {
+		await fetch("http://localhost:3001/api/login", {
 			method: "POST",
 			mode: "cors",
 			credentials: "include",

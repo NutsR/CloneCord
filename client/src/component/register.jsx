@@ -15,7 +15,7 @@ function Register() {
 	};
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		const res = await fetch("http://localhost:3001/api/register", {
+		await fetch("http://localhost:3001/api/register", {
 			method: "POST",
 			mode: "cors",
 			credentials: "include",
@@ -27,7 +27,6 @@ function Register() {
 
 		checkLogin();
 	};
-	console.log(user);
 	return (
 		<>
 			{!user.id && (
