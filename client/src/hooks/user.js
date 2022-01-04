@@ -2,7 +2,7 @@ import { useContext, useState, createContext, useEffect } from "react";
 import { socket } from "../App";
 
 const UserContext = createContext();
-const initState = {
+export const initState = {
 	username: `guest${Math.floor(Math.random() * 12000) + 1}`,
 	id: "",
 	socket_id: "",
@@ -21,11 +21,16 @@ function UserProvider({ children }) {
 		const data = await res.json();
 
 		if (data.id) {
-			const sessionID = localStorage.getItem(`${data.username}`);
-			socket.auth = { username: data.username, sessionID: sessionID };
-			socket.connect();
 			setUser(data);
+			const sessionID = localStorage.getItem(`${data.username}`);
+			if (sessionID) {
+				socket.auth = { username: data.username, sessionID: sessionID };
+				return socket.connect();
+			}
+			socket.auth = { username: data.username, sessionID: "" };
+			return socket.connect();
 		}
+		setUser(initState);
 	};
 	useEffect(() => {
 		socket.on("connect", () => {

@@ -1,8 +1,10 @@
 import { useUser } from "../hooks/user";
+import { useEffect, useState, useCallback } from "react";
 import { socket } from "../App";
 function Logout() {
-	const { user, setUser } = useUser();
-	const handleLogout = async () => {
+	const { user, checkLogin } = useUser();
+	const [logoutReq, setLogoutReq] = useState(false);
+	const handleLogout = useCallback(async () => {
 		await fetch("http://localhost:3001/api/logout", {
 			method: "POST",
 			mode: "cors",
@@ -12,13 +14,19 @@ function Logout() {
 			},
 			body: JSON.stringify(user),
 		});
-		setUser({});
-		socket.close();
-		localStorage.removeItem("sessionID");
-	};
+		if (logoutReq) {
+			socket.disconnect();
+		}
+	}, [user, logoutReq]);
+	useEffect(() => {
+		if (logoutReq) {
+			handleLogout();
+			checkLogin();
+		}
+	}, [logoutReq, handleLogout]);
 	return (
 		<div>
-			<button onClick={handleLogout}>Logout</button>
+			<button onClick={() => setLogoutReq(true)}>Logout</button>
 		</div>
 	);
 }
