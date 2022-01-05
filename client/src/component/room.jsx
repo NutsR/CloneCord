@@ -3,7 +3,7 @@ import { useState } from "react";
 function CreateRoom() {
 	const [value, setValue] = useState("");
 	const createRoom = () => {
-		socket.emit("create-room", value);
+		socket.emit("create-join-room", value);
 	};
 	return (
 		<div>

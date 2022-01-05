@@ -6,10 +6,13 @@ import CreateRoom from "./component/room";
 import Contacts from "./component/contacts";
 import Logout from "./component/logout";
 import { useUser } from "./hooks/user";
+import { useState } from "react";
 const socket = io({ autoConnect: false });
 
 function App() {
 	const { user, setUser } = useUser();
+	const [login, showLogin] = useState(false);
+
 	socket.on("session", ({ sessionID, userID }) => {
 		if (!user.username.includes("guest")) {
 			const existingSession = localStorage.getItem(`${user.username}`);
@@ -25,19 +28,20 @@ function App() {
 	});
 	return (
 		<div className="App">
-			<CreateRoom />
-			<Register />
-			<Login />
-			<h1>Hello socket</h1>
-			{user.id ? (
-				<>
-					<Logout />
-					<Contacts />
-					<Chat />
-				</>
-			) : null}
+			<div className="container">
+				<h2>Welcome to Clone cord</h2>
+				<h3>Register/Login</h3>
+				<LoginOrRegister login={login} />
+			</div>
 		</div>
 	);
 }
 export { socket };
 export default App;
+
+function LoginOrRegister({ login }) {
+	if (login) {
+		return <Login />;
+	}
+	return <Register />;
+}

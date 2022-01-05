@@ -110,7 +110,7 @@ io.on("connection", (socket) => {
 		message.user = socket.id;
 		io.emit("receive-message", message);
 	});
-	socket.on("create-room", (room) => {
+	socket.on("create-join-room", (room) => {
 		socket.join(room);
 		socket.room = room;
 	});
