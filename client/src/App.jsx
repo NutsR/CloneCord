@@ -6,12 +6,12 @@ import CreateRoom from "./component/room";
 import Contacts from "./component/contacts";
 import Logout from "./component/logout";
 import { useUser } from "./hooks/user";
-import { useState } from "react";
+import { useState, useRef } from "react";
 const socket = io({ autoConnect: false });
 
 function App() {
 	const { user, setUser } = useUser();
-	const [login, showLogin] = useState(false);
+	const [form, showForm] = useState({ selection: "register" });
 
 	socket.on("session", ({ sessionID, userID }) => {
 		if (!user.username.includes("guest")) {
@@ -26,22 +26,29 @@ function App() {
 			socket.auth = { sessionID: existingSession };
 		}
 	});
+	const handleClick = (e) => {
+		if (e.target.id !== form.selection) {
+			return showForm({ selection: e.target.id });
+		}
+	};
 	return (
 		<div className="App">
 			<div className="container">
-				<h2>Welcome to Clone cord</h2>
-				<h3>Register/Login</h3>
-				<LoginOrRegister login={login} />
+				<div className={`form-card ${form.selection}`}>
+					<h2 className="main-title">
+						{form.selection === "login"
+							? "Welcome to Clone cord"
+							: "Create an account"}
+					</h2>
+					{form.selection === "register" ? (
+						<Register handleClick={handleClick} />
+					) : (
+						<Login handleClick={handleClick} />
+					)}
+				</div>
 			</div>
 		</div>
 	);
 }
 export { socket };
 export default App;
-
-function LoginOrRegister({ login }) {
-	if (login) {
-		return <Login />;
-	}
-	return <Register />;
-}

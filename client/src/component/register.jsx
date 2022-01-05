@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useUser } from "../hooks/user";
-function Register() {
+function Register({ handleClick }) {
 	const { user, checkLogin } = useUser();
 	const objState = {
 		username: "",
@@ -32,44 +32,61 @@ function Register() {
 			{!user.id && (
 				<form onSubmit={handleSubmit}>
 					<div>
-						<input
-							type="text"
-							value={userObj.username}
-							name="username"
-							onChange={handleChange}
-						/>
-						<label htmlFor="username">Username</label>
-					</div>
-					<div>
+						<label htmlFor="email" className="placeholderText">
+							EMAIL
+						</label>
 						<input
 							type="email"
 							value={userObj.email}
 							name="email"
 							onChange={handleChange}
+							className="input"
 						/>
-						<label htmlFor="email">Email (Invalids Ok)</label>
 					</div>
 					<div>
+						<label htmlFor="username" className="placeholderText">
+							USERNAME
+						</label>
+						<input
+							type="text"
+							value={userObj.username}
+							name="username"
+							onChange={handleChange}
+							className="input"
+						/>
+					</div>
+
+					<div>
+						<label htmlFor="password" className="placeholderText">
+							PASSWORD
+						</label>
 						<input
 							type="password"
 							value={userObj.password}
 							name="password"
 							onChange={handleChange}
+							className="input"
 						/>
-						<label htmlFor="password">Password (don't type real ones)</label>
 					</div>
-					<div>
-						<input
-							type="password"
-							value={userObj.confirmPassword}
-							name="confirmPassword"
-							onChange={handleChange}
-						/>
-						<label htmlFor="confirmPassword">
-							Password (don't type real ones)
-						</label>
+					<div className="placeholderText">DATE OF BIRTH</div>
+					<div className="container-dob">
+						<div className="select-opt-mm">Select</div>
+						<div className="select-opt-dd">Select</div>
+						<div className="select-opt-yy">Select</div>
 					</div>
-					<button>Register</button>
+					<button className="btn btn-login">Continue</button>
+					<div
+						className="have-an-account link-text"
+						onClick={handleClick}
+						id="login"
+					>
+						Already have an account?
+					</div>
+					<div className="terms-service">
+						By registering, you agree to Discord's
+						<span className="link-text"> Terms of Service</span> and{" "}
+						<span className="link-text">Privacy Policy</span>
+					</div>
 				</form>
 			)}
 		</>
