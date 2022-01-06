@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { useUser } from "../hooks/user";
+import SelectLogo from "../dist/downarrow.png";
+import DropDown from "./dropdown-component";
+import { months, days, years } from "../utils/item.js";
 function Register({ handleClick }) {
 	const { user, checkLogin } = useUser();
 	const objState = {
@@ -26,6 +29,39 @@ function Register({ handleClick }) {
 		});
 
 		checkLogin();
+	};
+	const [state, setState] = useState({
+		month: false,
+		year: false,
+		day: false,
+	});
+	const [dobstate, setDobState] = useState({ month: "", day: 0, year: 0 });
+	const handleDobClick = (e) => {
+		switch (e.target.id) {
+			case "month":
+				setState({ month: !state.month, day: false, year: false });
+				break;
+			case "year":
+				setState({ month: false, day: false, year: !state.year });
+				break;
+			case "day":
+				setState({ month: false, day: !state.day, year: false });
+				break;
+			default:
+				setState({ month: false, day: false, year: false });
+				break;
+		}
+	};
+	const handleDobChange = (e, id) => {
+		if (id === "months") {
+			setDobState({ ...dobstate, month: e.target.id });
+			return setState({ ...state, month: false });
+		} else if (id === "years") {
+			setDobState({ ...dobstate, year: e.target.id });
+			return setState({ ...state, year: false });
+		}
+		setDobState({ ...dobstate, day: e.target.id });
+		setState({ ...state, day: false });
 	};
 	return (
 		<>
@@ -70,9 +106,63 @@ function Register({ handleClick }) {
 					</div>
 					<div className="placeholderText">DATE OF BIRTH</div>
 					<div className="container-dob">
-						<div className="select-opt-mm">Select</div>
-						<div className="select-opt-dd">Select</div>
-						<div className="select-opt-yy">Select</div>
+						<div className="select-opt-mm" id="month" onClick={handleDobClick}>
+							{!dobstate.month ? (
+								"Select"
+							) : (
+								<span className="selected">{dobstate.month}</span>
+							)}
+							<div className="select-arrow" id="month">
+								<img src={SelectLogo} alt="select" id="month" />
+							</div>
+							{state.month && (
+								<DropDown
+									valueArray={months}
+									divClass={"dropdown-mm"}
+									divId={"months"}
+									handleClose={setState}
+									handleClick={handleDobChange}
+								/>
+							)}
+						</div>
+						<div className="select-opt-dd" id="day" onClick={handleDobClick}>
+							{!dobstate.day ? (
+								"Select"
+							) : (
+								<span className="selected">{dobstate.day}</span>
+							)}
+							<div className="select-arrow" id="day">
+								<img src={SelectLogo} alt="select" id="day" />
+							</div>
+							{state.day && (
+								<DropDown
+									valueArray={days}
+									divClass={"dropdown-dd"}
+									divId={"days"}
+									handleClose={setState}
+									handleClick={handleDobChange}
+								/>
+							)}
+						</div>
+						<div className="select-opt-yy" id="year" onClick={handleDobClick}>
+							{!dobstate.year ? (
+								"Select"
+							) : (
+								<span className="selected">{dobstate.year}</span>
+							)}
+							<div className="select-arrow" id="year">
+								<img src={SelectLogo} alt="select" id="year" />
+							</div>
+							{state.year && (
+								<DropDown
+									valueArray={years}
+									divClass={"dropdown-yy"}
+									divId={"years"}
+									handleClose={setState}
+									handleClick={handleDobChange}
+								/>
+							)}
+						</div>
 					</div>
 					<button className="btn btn-login">Continue</button>
 					<div
@@ -83,9 +173,8 @@ function Register({ handleClick }) {
 						Already have an account?
 					</div>
 					<div className="terms-service">
-						By registering, you agree to Discord's
-						<span className="link-text"> Terms of Service</span> and{" "}
-						<span className="link-text">Privacy Policy</span>
+						By registering, you agree to{" "}
+						<span className="link-text">Nothing</span>
 					</div>
 				</form>
 			)}

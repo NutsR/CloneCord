@@ -11,7 +11,7 @@ const socket = io({ autoConnect: false });
 
 function App() {
 	const { user, setUser } = useUser();
-	const [form, showForm] = useState({ selection: "register" });
+	const [form, showForm] = useState({ selection: "login" });
 
 	socket.on("session", ({ sessionID, userID }) => {
 		if (!user.username.includes("guest")) {
