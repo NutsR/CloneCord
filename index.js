@@ -12,13 +12,13 @@ const app = express();
 const server = http.createServer(app);
 const registerRoutes = require("./router/register-login");
 const userRoutes = require("./router/user");
-const { InMemorySessionStore } = require("./utils/sessionStore");
-const crypto = require("crypto");
-const randomID = () => crypto.randomBytes(8).toString("hex");
+const serverRoutes = require("./router/server");
+const { userAuth, sessionStore } = require("./middleware/userAuth");
 const io = new Server(server, {
 	cors: { origin: "http://localhost:3000", methods: ["GET", "POST"] },
 });
-const sessionStore = new InMemorySessionStore();
+global.io = io;
+
 app.use(
 	cors({
 		origin: "http://localhost:3000",
@@ -60,28 +60,8 @@ if (process.env.NODE_ENV === "production") {
 		res.sendFile(path.join(__dirname, "client/build", "index.html"));
 	});
 }
-app.use("/api", registerRoutes, userRoutes);
-io.use((socket, next) => {
-	const sessionID = socket.handshake.auth.sessionID;
-	if (sessionID) {
-		const session = sessionStore.findSession(sessionID);
-		if (session) {
-			socket.sessionID = sessionID;
-			socket.userID = session.userID;
-			socket.username = session.username;
-			return next();
-		}
-	}
-	const username = socket.handshake.auth.username;
-	if (!username) {
-		return next(new Error("invalid Username"));
-	}
-	socket.sessionID = randomID();
-	socket.userID = randomID();
-	socket.username = username;
-	console.log(socket.sessionID);
-	next();
-});
+app.use("/api", registerRoutes, userRoutes, serverRoutes);
+io.use(userAuth);
 io.on("connection", (socket) => {
 	sessionStore.saveSession(socket.handshake.auth.sessionID, {
 		userID: socket.userID,
@@ -108,6 +88,7 @@ io.on("connection", (socket) => {
 			return;
 		}
 		message.user = socket.id;
+		message.time = new Date().toDateString();
 		io.emit("receive-message", message);
 	});
 	socket.on("create-join-room", (room) => {

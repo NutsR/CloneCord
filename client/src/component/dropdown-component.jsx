@@ -1,5 +1,12 @@
 import { useRef, useEffect } from "react";
-function DropDown({ valueArray, divClass, handleClick, handleClose, divId }) {
+function DropDown({
+	valueArray,
+	divClass,
+	handleClick,
+	handleClose,
+	divId,
+	selected,
+}) {
 	const resultsRef = useRef();
 	useEffect(() => {
 		const handler = (event) => {
@@ -16,7 +23,9 @@ function DropDown({ valueArray, divClass, handleClick, handleClose, divId }) {
 				{valueArray.map((value, i) => (
 					<li
 						key={i}
-						className="dropdown-item"
+						className={`dropdown-item ${
+							value.toString() === selected ? "selection" : ""
+						}`}
 						id={value}
 						onClick={(e) => handleClick(e, divId)}
 					>

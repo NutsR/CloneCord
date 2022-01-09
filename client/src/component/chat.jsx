@@ -3,31 +3,20 @@ import { useUser } from "../hooks/user";
 import { socket } from "../App.jsx";
 function Chat() {
 	const { user } = useUser();
-	const [msgSent, setMsgSent] = useState({
-		message: "",
-		user: "",
-		name: `${user.username}`,
-	});
 	const [messages, setMessages] = useState([]);
-	const onChange = (e) => {
-		setMsgSent({ ...msgSent, message: e.target.value });
-	};
-	const handleSend = (e) => {
-		if (e) {
-			e.preventDefault();
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		let message = e.currentTarget.inputMsg.value;
+		if (user.id) {
+			socket.emit("sent-message", {
+				message,
+				user: user.socket_id,
+				name: user.username,
+			});
+			e.currentTarget.inputMsg.value = "";
 		}
-		socket.emit("sent-message", msgSent);
-		setMsgSent({ ...msgSent, message: "" });
-	};
-	const handleKeyPress = (e) => {
-		if (e.keyCode === 13) handleSend();
 	};
 	useEffect(() => {
-		if (user.id) {
-			setMsgSent((m) => {
-				return { ...m, name: `${user.username}` };
-			});
-		}
 		socket.on("receive-message", (message) => {
 			setMessages(() => [...messages, message]);
 		});
@@ -36,22 +25,27 @@ function Chat() {
 		};
 	}, [messages]);
 	return (
-		<>
-			{messages.length
-				? messages.map((element, i) => (
-						<p key={i}>
-							{element.message} by {element.name}
-						</p>
-				  ))
-				: null}
-			<input
-				type="text"
-				value={msgSent.message}
-				onChange={onChange}
-				onKeyPress={handleKeyPress}
-			/>
-			<button onClick={handleSend}>Send</button>
-		</>
+		<div className="chat-container">
+			<div className="chat-messages">
+				{messages.length
+					? messages.map((element, i) => (
+							<>
+								<div className="messages">
+									<span className="username">
+										{element.name} at {element.time}
+									</span>
+									<p key={i} className="msg">
+										{element.message}
+									</p>
+								</div>
+							</>
+					  ))
+					: null}
+			</div>
+			<form className="chat-input" onSubmit={handleSubmit}>
+				<input type="text" name="inputMsg" />
+			</form>
+		</div>
 	);
 }
 export default Chat;

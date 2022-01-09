@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useUser } from "../hooks/user";
 import SelectLogo from "../dist/downarrow.png";
 import DropDown from "./dropdown-component";
+import { Link } from "react-router-dom";
 import { months, days, years } from "../utils/item.js";
 function Register({ handleClick }) {
 	const { user, checkLogin } = useUser();
@@ -9,7 +10,6 @@ function Register({ handleClick }) {
 		username: "",
 		email: "",
 		password: "",
-		confirmPassword: "",
 	};
 	const [userObj, setUserObj] = useState(objState);
 	const handleChange = (e) => {
@@ -66,117 +66,129 @@ function Register({ handleClick }) {
 	return (
 		<>
 			{!user.id && (
-				<form onSubmit={handleSubmit}>
-					<div>
-						<label htmlFor="email" className="placeholderText">
-							EMAIL
-						</label>
-						<input
-							type="email"
-							value={userObj.email}
-							name="email"
-							onChange={handleChange}
-							className="input"
-						/>
-					</div>
-					<div>
-						<label htmlFor="username" className="placeholderText">
-							USERNAME
-						</label>
-						<input
-							type="text"
-							value={userObj.username}
-							name="username"
-							onChange={handleChange}
-							className="input"
-						/>
-					</div>
+				<div className="form-card register">
+					<h2 className="main-title">Create an Account</h2>
+					<form onSubmit={handleSubmit}>
+						<div>
+							<label htmlFor="email" className="placeholderText">
+								EMAIL
+							</label>
+							<input
+								type="email"
+								value={userObj.email}
+								name="email"
+								onChange={handleChange}
+								className="input"
+							/>
+						</div>
+						<div>
+							<label htmlFor="username" className="placeholderText">
+								USERNAME
+							</label>
+							<input
+								type="text"
+								value={userObj.username}
+								name="username"
+								onChange={handleChange}
+								className="input"
+							/>
+						</div>
 
-					<div>
-						<label htmlFor="password" className="placeholderText">
-							PASSWORD
-						</label>
-						<input
-							type="password"
-							value={userObj.password}
-							name="password"
-							onChange={handleChange}
-							className="input"
-						/>
-					</div>
-					<div className="placeholderText">DATE OF BIRTH</div>
-					<div className="container-dob">
-						<div className="select-opt-mm" id="month" onClick={handleDobClick}>
-							{!dobstate.month ? (
-								"Select"
-							) : (
-								<span className="selected">{dobstate.month}</span>
-							)}
-							<div className="select-arrow" id="month">
-								<img src={SelectLogo} alt="select" id="month" />
-							</div>
-							{state.month && (
-								<DropDown
-									valueArray={months}
-									divClass={"dropdown-mm"}
-									divId={"months"}
-									handleClose={setState}
-									handleClick={handleDobChange}
-								/>
-							)}
+						<div>
+							<label htmlFor="password" className="placeholderText">
+								PASSWORD
+							</label>
+							<input
+								type="password"
+								value={userObj.password}
+								name="password"
+								onChange={handleChange}
+								className="input"
+							/>
 						</div>
-						<div className="select-opt-dd" id="day" onClick={handleDobClick}>
-							{!dobstate.day ? (
-								"Select"
-							) : (
-								<span className="selected">{dobstate.day}</span>
-							)}
-							<div className="select-arrow" id="day">
-								<img src={SelectLogo} alt="select" id="day" />
+						<div className="placeholderText">DATE OF BIRTH</div>
+						<div className="container-dob">
+							<div
+								className="select-opt-mm"
+								id="month"
+								onClick={handleDobClick}
+							>
+								{!dobstate.month ? (
+									"Select"
+								) : (
+									<span className="selected">{dobstate.month}</span>
+								)}
+								<div className="select-arrow" id="month">
+									<img src={SelectLogo} alt="select" id="month" />
+								</div>
+								{state.month && (
+									<DropDown
+										valueArray={months}
+										divClass={"dropdown-mm"}
+										divId={"months"}
+										handleClose={setState}
+										handleClick={handleDobChange}
+										selected={dobstate.month}
+									/>
+								)}
 							</div>
-							{state.day && (
-								<DropDown
-									valueArray={days}
-									divClass={"dropdown-dd"}
-									divId={"days"}
-									handleClose={setState}
-									handleClick={handleDobChange}
-								/>
-							)}
-						</div>
-						<div className="select-opt-yy" id="year" onClick={handleDobClick}>
-							{!dobstate.year ? (
-								"Select"
-							) : (
-								<span className="selected">{dobstate.year}</span>
-							)}
-							<div className="select-arrow" id="year">
-								<img src={SelectLogo} alt="select" id="year" />
+							<div className="select-opt-dd" id="day" onClick={handleDobClick}>
+								{!dobstate.day ? (
+									"Select"
+								) : (
+									<span className="selected">{dobstate.day}</span>
+								)}
+								<div className="select-arrow" id="day">
+									<img src={SelectLogo} alt="select" id="day" />
+								</div>
+								{state.day && (
+									<DropDown
+										valueArray={days}
+										divClass={"dropdown-dd"}
+										divId={"days"}
+										handleClose={setState}
+										selected={dobstate.day}
+										handleClick={handleDobChange}
+									/>
+								)}
 							</div>
-							{state.year && (
-								<DropDown
-									valueArray={years}
-									divClass={"dropdown-yy"}
-									divId={"years"}
-									handleClose={setState}
-									handleClick={handleDobChange}
-								/>
-							)}
+							<div className="select-opt-yy" id="year" onClick={handleDobClick}>
+								{!dobstate.year ? (
+									"Select"
+								) : (
+									<span className="selected">{dobstate.year}</span>
+								)}
+								<div className="select-arrow" id="year">
+									<img src={SelectLogo} alt="select" id="year" />
+								</div>
+								{state.year && (
+									<DropDown
+										valueArray={years}
+										divClass={"dropdown-yy"}
+										divId={"years"}
+										selected={dobstate.year}
+										handleClose={setState}
+										handleClick={handleDobChange}
+									/>
+								)}
+							</div>
 						</div>
-					</div>
-					<button className="btn btn-login">Continue</button>
-					<div
-						className="have-an-account link-text"
-						onClick={handleClick}
-						id="login"
-					>
-						Already have an account?
-					</div>
-					<div className="terms-service">
-						By registering, you agree to{" "}
-						<span className="link-text">Nothing</span>
-					</div>
-				</form>
+						<button className="btn btn-login">Continue</button>
+						<Link to="/login">
+							<div
+								className="have-an-account link-text"
+								onClick={handleClick}
+								id="login"
+							>
+								Already have an account?
+							</div>
+						</Link>
+						<div className="terms-service">
+							By registering, you agree to{" "}
+							<span className="link-text">Nothing</span>
+						</div>
+					</form>
+				</div>
 			)}
 		</>
 	);
