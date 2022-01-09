@@ -1,11 +1,14 @@
-import { useState } from "react";
-import { socket } from "../App";
+import { useContext, useEffect, useState } from "react";
 import { useUser } from "../hooks/user";
-import { io } from "socket.io-client";
+import { SocketContext } from "../hooks/socket.io.context";
+import { useParams } from "react-router-dom";
 function Contacts() {
+	const { id } = useParams();
+	const socket = useContext(SocketContext);
 	const { user } = useUser();
 	const [contacts, setContacts] = useState([]);
 	const [selected, setSelected] = useState("");
+	const [channel, setChannel] = useState({});
 	socket.on("users", (users) => {
 		setContacts(users);
 	});
@@ -18,26 +21,17 @@ function Contacts() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		const serverName = e.currentTarget.serverName.value;
-		const res = await fetch("http://localhost:3001/api/server/create", {
+		await fetch("http://localhost:3001/api/server/create", {
 			method: "post",
 			credentials: "include",
 			mode: "cors",
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ serverName, user: user.id }),
+			body: JSON.stringify({ serverName, user: user._id }),
 		});
-		const data = await res.json();
-
-		if (data.server._id) {
-			console.log(data.server.server_name);
-			let newsocket = io(`/${data.server.server_name}`, { autoConnect: false });
-			newsocket.connect();
-			newsocket.on("receive-message", (message) => {
-				console.log(message);
-			});
-		}
 	};
+	useEffect(() => {});
 	return (
 		<div className="contacts-container">
 			<span className="contact-title">Direct Message</span>
@@ -57,6 +51,18 @@ function Contacts() {
 				<input type="text" name="serverName" />
 				<button className="btn">Create a new server</button>
 			</form>
+			{user.server.length &&
+				user.server.map((server) => (
+					<div onClick={() => setChannel(server.channels)} key={server._id}>
+						{server.server_name}
+					</div>
+				))}
+			{channel.length &&
+				channel.map((chan) => (
+					<div key={chan._id} onClick={socket.emit("join-channel", chan._id)}>
+						{chan.name}
+					</div>
+				))}
 		</div>
 	);
 }

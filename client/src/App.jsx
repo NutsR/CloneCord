@@ -1,13 +1,13 @@
-import { io } from "socket.io-client";
 import Register from "./component/register";
 import Login from "./component/login";
 import { useUser } from "./hooks/user";
 import Channel from "./component/channel";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
-let socket = io({ autoConnect: false });
-
+import { useEffect, useContext } from "react";
+import { SocketContext } from "./hooks/socket.io.context";
 function App() {
+	const socket = useContext(SocketContext);
+
 	const { user, setUser } = useUser();
 	const location = useLocation();
 	const navigate = useNavigate();
@@ -43,5 +43,5 @@ function App() {
 		</div>
 	);
 }
-export { socket };
+
 export default App;

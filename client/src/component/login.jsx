@@ -23,7 +23,7 @@ function Login({ handleClick }) {
 	};
 	return (
 		<>
-			{!user.id && (
+			{!user._id && (
 				<div className="form-card login">
 					<h2 className="main-title">Welcome back to CloneCord</h2>
 					<form onSubmit={handleSubmit}>

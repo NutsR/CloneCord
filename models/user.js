@@ -7,6 +7,7 @@ const userSchema = new Schema({
 		required: [true, "Valid Email required"],
 		unique: true,
 	},
+	server: [{ type: Schema.Types.ObjectId, ref: "Server" }],
 });
 
 userSchema.plugin(passportLocalMongoose);

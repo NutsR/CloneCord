@@ -63,6 +63,7 @@ if (process.env.NODE_ENV === "production") {
 app.use("/api", registerRoutes, userRoutes, serverRoutes);
 io.use(userAuth);
 io.on("connection", (socket) => {
+	app.set("socket", socket);
 	sessionStore.saveSession(socket.handshake.auth.sessionID, {
 		userID: socket.userID,
 		username: socket.username,
@@ -91,7 +92,7 @@ io.on("connection", (socket) => {
 		message.time = new Date().toDateString();
 		io.emit("receive-message", message);
 	});
-	socket.on("create-join-room", (room) => {
+	socket.on("join-channel", (room) => {
 		socket.join(room);
 		socket.room = room;
 	});

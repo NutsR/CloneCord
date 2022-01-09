@@ -65,7 +65,7 @@ function Register({ handleClick }) {
 	};
 	return (
 		<>
-			{!user.id && (
+			{!user._id && (
 				<div className="form-card register">
 					<h2 className="main-title">Create an Account</h2>
 					<form onSubmit={handleSubmit}>

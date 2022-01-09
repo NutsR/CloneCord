@@ -5,14 +5,17 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import UserProvider from "./hooks/user";
 import { BrowserRouter as Router } from "react-router-dom";
+import { SocketContext, socket } from "./hooks/socket.io.context";
 
 ReactDOM.render(
 	<React.StrictMode>
-		<Router>
-			<UserProvider>
-				<App />
-			</UserProvider>
-		</Router>
+		<SocketContext.Provider value={socket}>
+			<Router>
+				<UserProvider>
+					<App />
+				</UserProvider>
+			</Router>
+		</SocketContext.Provider>
 	</React.StrictMode>,
 	document.getElementById("root")
 );

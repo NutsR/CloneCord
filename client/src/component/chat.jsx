@@ -1,13 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useUser } from "../hooks/user";
-import { socket } from "../App.jsx";
+import { SocketContext } from "../hooks/socket.io.context";
 function Chat() {
+	const socket = useContext(SocketContext);
+
 	const { user } = useUser();
 	const [messages, setMessages] = useState([]);
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		let message = e.currentTarget.inputMsg.value;
-		if (user.id) {
+		if (user._id) {
 			socket.emit("sent-message", {
 				message,
 				user: user.socket_id,
@@ -29,16 +31,14 @@ function Chat() {
 			<div className="chat-messages">
 				{messages.length
 					? messages.map((element, i) => (
-							<>
-								<div className="messages">
-									<span className="username">
-										{element.name} at {element.time}
-									</span>
-									<p key={i} className="msg">
-										{element.message}
-									</p>
-								</div>
-							</>
+							<div className="messages" key={i}>
+								<span className="username">
+									{element.name} at {element.time}
+								</span>
+								<p key={i} className="msg">
+									{element.message}
+								</p>
+							</div>
 					  ))
 					: null}
 			</div>

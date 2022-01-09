@@ -7,6 +7,15 @@ const serverSchema = new Schema({
 		type: Schema.Types.ObjectId,
 		ref: "User",
 	},
+	channels: [
+		{
+			name: {
+				type: String,
+				required: true,
+			},
+		},
+	],
+	users: [{ type: Schema.Types.ObjectId, ref: "User" }],
 });
 
 const Servers = mongoose.model("Server", serverSchema);

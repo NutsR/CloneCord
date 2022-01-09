@@ -1,6 +1,7 @@
 import { useContext, useState, createContext, useEffect } from "react";
 import { socket } from "../App";
 import { useNavigate } from "react-router-dom";
+import { SocketContext } from "./socket.io.context";
 const UserContext = createContext();
 export const initState = {
 	username: `guest${Math.floor(Math.random() * 12000) + 1}`,
@@ -11,6 +12,7 @@ export function useUser() {
 	return useContext(UserContext);
 }
 function UserProvider({ children }) {
+	const socket = useContext(SocketContext);
 	const navigate = useNavigate();
 	const [user, setUser] = useState(initState);
 	const [loader, setLoader] = useState(true);
@@ -23,7 +25,7 @@ function UserProvider({ children }) {
 
 		const data = await res.json();
 
-		if (data.id) {
+		if (data._id) {
 			setUser(data);
 			setLoader(false);
 			const sessionID = localStorage.getItem(`${data.username}`);
