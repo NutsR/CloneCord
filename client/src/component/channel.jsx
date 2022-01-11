@@ -4,12 +4,13 @@ import { useUser } from "../hooks/user";
 import Contacts from "./contacts";
 import { SocketContext } from "../hooks/socket.io.context";
 import "../styles/styles.css";
-
+import { useSelect } from "../hooks/channel";
 import Chat from "./chat";
 function Channel() {
 	const socket = useContext(SocketContext);
 	const { user, loader, checkLogin } = useUser();
 	const navigate = useNavigate();
+	const { selected } = useSelect();
 	useEffect(() => {
 		checkLogin();
 		if (!loader) {
@@ -24,7 +25,7 @@ function Channel() {
 	return (
 		<div className="channel-container">
 			<Contacts />
-			<Chat />
+			{selected._id && <Chat />}
 		</div>
 	);
 }

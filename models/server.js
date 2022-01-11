@@ -7,14 +7,7 @@ const serverSchema = new Schema({
 		type: Schema.Types.ObjectId,
 		ref: "User",
 	},
-	channels: [
-		{
-			name: {
-				type: String,
-				required: true,
-			},
-		},
-	],
+	channels: [{ type: Schema.Types.ObjectId, ref: "Channel" }],
 	users: [{ type: Schema.Types.ObjectId, ref: "User" }],
 });
 

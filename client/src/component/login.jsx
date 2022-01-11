@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useUser } from "../hooks/user";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 function Login({ handleClick }) {
+	const navigate = useNavigate();
 	const { user, checkLogin } = useUser();
 	const [userObj, setUserObj] = useState({ username: "", password: "" });
 	const handleChange = (e) => {
@@ -9,6 +10,9 @@ function Login({ handleClick }) {
 		setUserObj({ ...userObj, [name]: value });
 	};
 	const handleSubmit = async (e) => {
+		if (user._id) {
+			navigate("/channels");
+		}
 		e.preventDefault();
 		await fetch("http://localhost:3001/api/login", {
 			method: "POST",
@@ -22,7 +26,7 @@ function Login({ handleClick }) {
 		checkLogin();
 	};
 	return (
-		<>
+		<div className="container">
 			{!user._id && (
 				<div className="form-card login">
 					<h2 className="main-title">Welcome back to CloneCord</h2>
@@ -65,7 +69,7 @@ function Login({ handleClick }) {
 					</form>
 				</div>
 			)}
-		</>
+		</div>
 	);
 }
 

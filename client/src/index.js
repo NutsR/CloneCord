@@ -6,13 +6,16 @@ import reportWebVitals from "./reportWebVitals";
 import UserProvider from "./hooks/user";
 import { BrowserRouter as Router } from "react-router-dom";
 import { SocketContext, socket } from "./hooks/socket.io.context";
+import ChannelProvider from "./hooks/channel";
 
 ReactDOM.render(
 	<React.StrictMode>
 		<SocketContext.Provider value={socket}>
 			<Router>
 				<UserProvider>
-					<App />
+					<ChannelProvider>
+						<App />
+					</ChannelProvider>
 				</UserProvider>
 			</Router>
 		</SocketContext.Provider>

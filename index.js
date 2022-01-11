@@ -14,6 +14,8 @@ const registerRoutes = require("./router/register-login");
 const userRoutes = require("./router/user");
 const serverRoutes = require("./router/server");
 const { userAuth, sessionStore } = require("./middleware/userAuth");
+const Message = require("./models/message");
+const Channel = require("./models/channel");
 const io = new Server(server, {
 	cors: { origin: "http://localhost:3000", methods: ["GET", "POST"] },
 });
@@ -83,18 +85,25 @@ io.on("connection", (socket) => {
 		});
 	});
 	socket.emit("users", users);
-	socket.on("sent-message", (message) => {
+	socket.on("sent-message", async (data) => {
 		if (socket.room) {
+			const channel = await Channel.findById(data.channel_id);
+			const message = new Message({
+				...data,
+				time: new Date().toDateString(),
+			});
+			channel.messages.push([message._id]);
+			await message.save();
+			await channel.save();
 			io.to(socket.room).emit("receive-message", message);
 			return;
 		}
-		message.user = socket.id;
-		message.time = new Date().toDateString();
-		io.emit("receive-message", message);
 	});
-	socket.on("join-channel", (room) => {
+	socket.on("join-channel", async (room) => {
 		socket.join(room);
 		socket.room = room;
+		const channel = await Channel.findById(room).populate("messages");
+		socket.emit("history", channel.messages);
 	});
 });
 server.listen(3001, () => {

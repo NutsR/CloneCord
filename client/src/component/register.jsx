@@ -2,9 +2,10 @@ import { useState } from "react";
 import { useUser } from "../hooks/user";
 import SelectLogo from "../dist/downarrow.png";
 import DropDown from "./dropdown-component";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { months, days, years } from "../utils/item.js";
 function Register({ handleClick }) {
+	const navigate = useNavigate();
 	const { user, checkLogin } = useUser();
 	const objState = {
 		username: "",
@@ -17,6 +18,9 @@ function Register({ handleClick }) {
 		setUserObj({ ...userObj, [name]: value });
 	};
 	const handleSubmit = async (e) => {
+		if (user._id) {
+			navigate("/channels");
+		}
 		e.preventDefault();
 		await fetch("http://localhost:3001/api/register", {
 			method: "POST",
@@ -64,7 +68,7 @@ function Register({ handleClick }) {
 		setState({ ...state, day: false });
 	};
 	return (
-		<>
+		<div className="container">
 			{!user._id && (
 				<div className="form-card register">
 					<h2 className="main-title">Create an Account</h2>
@@ -190,7 +194,7 @@ function Register({ handleClick }) {
 					</form>
 				</div>
 			)}
-		</>
+		</div>
 	);
 }
 
