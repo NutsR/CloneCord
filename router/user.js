@@ -17,7 +17,6 @@ router.get("/user", async (req, res) => {
 				},
 			],
 		});
-		console.log(user._doc.server[0].users);
 		res.status(200).json(user._doc);
 	} else {
 		res.json({ notfound: true });

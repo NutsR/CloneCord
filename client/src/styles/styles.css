@@ -66,6 +66,7 @@
 
 .messages {
 	margin-left: 5px;
+	overflow-wrap: break-word;
 }
 .style-display {
 	border-radius: 50%;
