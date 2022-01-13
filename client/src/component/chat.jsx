@@ -35,26 +35,28 @@ function Chat() {
 		};
 	}, [messages]);
 	return (
-		<div className="chat-container">
-			<div>{selected.name}</div>
-			<div className="chat-messages">
-				{messages.length
-					? messages.map((element, i) => (
-							<div className="messages" key={i}>
-								<span className="username">
-									{element.username} at {element.time}
-								</span>
-								<p key={i} className="msg">
-									{element.message}
-								</p>
-							</div>
-					  ))
-					: null}
+		<>
+			<div className="header">{selected.name}</div>
+			<div className="chat-container">
+				<div className="chat-messages">
+					{messages.length
+						? messages.map((element, i) => (
+								<div className="messages" key={i}>
+									<span className="username">
+										{element.username} at {element.time}
+									</span>
+									<p key={i} className="msg">
+										{element.message}
+									</p>
+								</div>
+						  ))
+						: null}
+				</div>
+				<form className="chat-input" onSubmit={handleSubmit}>
+					<input type="text" name="inputMsg" />
+				</form>
 			</div>
-			<form className="chat-input" onSubmit={handleSubmit}>
-				<input type="text" name="inputMsg" />
-			</form>
-		</div>
+		</>
 	);
 }
 export default Chat;

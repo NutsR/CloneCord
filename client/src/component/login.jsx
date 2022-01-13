@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUser } from "../hooks/user";
 import { Link, useNavigate } from "react-router-dom";
 function Login({ handleClick }) {
@@ -25,6 +25,11 @@ function Login({ handleClick }) {
 		});
 		checkLogin();
 	};
+	useEffect(() => {
+		if (user._id) {
+			navigate("/channels/@me");
+		}
+	});
 	return (
 		<div className="container">
 			{!user._id && (

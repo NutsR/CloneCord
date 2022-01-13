@@ -50,6 +50,7 @@ function UserProvider({ children }) {
 		socket.on("connect", () => {
 			setUser((u) => ({ ...u, socket_id: "" }));
 		});
+		checkLogin();
 	}, []);
 	return (
 		<UserContext.Provider value={{ user, checkLogin, setUser, loader }}>

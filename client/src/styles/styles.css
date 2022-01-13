@@ -4,15 +4,20 @@
 }
 .contacts-container {
 	display: flex;
+	position: fixed;
+	height: 100%;
 	flex-direction: column;
 	width: 6%;
 	background-color: #202225;
+	scrollbar-color:#202225 #2f3136 ;
 	color: #8e9297;
 	font-size: 16px;
 	line-height: 16px;
 	font-weight: 600;
 	display: flex;
+	overflow-y: scroll;
 	align-items: flex-end;
+	scroll-behavior: auto;
 }
 .contacts-item {
 	padding: 15px 10px;
@@ -30,10 +35,11 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-end;
-	min-width: 65%;
+	min-width: 61%;
 	background-color: #36393f;
 	color: #dcddde;
-	margin-right: 16%;
+	margin-right: 20%;
+	margin-left: 23%;
 }
 .username {
 	color: #fff;
@@ -44,15 +50,22 @@
 	border-bottom: 1px solid #fff;
 	cursor: pointer;
 }
+.chat-input{
+	position: fixed;
+	bottom: 0;
+	background-color: #36393f;
+	width: 59.7%;
+}
 .chat-input > input {
 	width: 80%;
 	box-sizing: border-box;
 	margin: 5px 0px;
+	margin-top: none;
 	margin-bottom: 7px;
 	height: 6vh;
 	border-radius: 5px;
 	background-color: #40444b;
-	border: 1px #222428 solid;
+	border: none;
 	color: white;
 	padding-left: 10px;
 	padding-right: 5px;
@@ -67,6 +80,9 @@
 .messages {
 	margin-left: 5px;
 	overflow-wrap: break-word;
+}
+.messages:last-child{
+	margin-bottom: 10%;
 }
 .style-display {
 	border-radius: 50%;
@@ -90,9 +106,12 @@
 }
 
 .channels-container {
-	width: 20%;
+	width: 17%;
 	background-color: #2f3136;
 	color: #ffffff;
+	position: fixed;
+	margin-left: 6%;
+	height: 100%;
 }
 .channels-container > a {
 	color: #ffffff !important;
@@ -122,6 +141,7 @@
 	font-size: 16px;
 	line-height: 16px;
 	font-weight: 600;
+	border-bottom: 3px solid #2b2e33;
 }
 .channel-subtitle {
 	color: #8e9297;
@@ -177,4 +197,19 @@
 .user:hover{
 	background-color: #393c42;
 	color: #ffffff;
+}
+.chat-messages{
+	overflow-y: scroll;
+	scrollbar-color:#202225 #2f3136 ;
+	height: 92.6vh;
+}
+.header{
+	position: fixed;
+	left: 23%;
+	height: 7%;
+	background-color: #2f3136;
+	color: #ffffff;
+	width: 61%;
+	border-bottom: 3px solid #2b2e33;
+	top: 0;
 }
