@@ -7,15 +7,18 @@ import UserProvider from "./hooks/user";
 import { BrowserRouter as Router } from "react-router-dom";
 import { SocketContext, socket } from "./hooks/socket.io.context";
 import ChannelProvider from "./hooks/channel";
+import ServerProvider from "./hooks/server";
 
 ReactDOM.render(
 	<React.StrictMode>
 		<SocketContext.Provider value={socket}>
 			<Router>
 				<UserProvider>
-					<ChannelProvider>
-						<App />
-					</ChannelProvider>
+					<ServerProvider>
+						<ChannelProvider>
+							<App />
+						</ChannelProvider>
+					</ServerProvider>
 				</UserProvider>
 			</Router>
 		</SocketContext.Provider>

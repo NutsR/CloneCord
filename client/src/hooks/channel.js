@@ -5,7 +5,6 @@ export function useSelect() {
 }
 function ChannelProvider({ children }) {
 	const [selected, setSelected] = useState({});
-	console.log(selected);
 	return (
 		<ChannelContext.Provider value={{ selected, setSelected }}>
 			{children}

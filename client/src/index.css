@@ -71,6 +71,7 @@ a{
 }
 .btn {
 	padding: 15px 32px;
+	
 }
 .btn-login {
 	margin-top: 13px;
@@ -82,7 +83,12 @@ a{
 	font-weight: 600;
 	font-size: small;
 }
-
+.join-btn{
+	border-radius: 50%;
+	width: 50px;
+	height: 50px;
+	margin-right: 15px;
+}
 .link-text {
 	color: #00aff4;
 	font-size: small;

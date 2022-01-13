@@ -7,13 +7,17 @@ router.get("/user", async (req, res) => {
 	if (req.session.loggedIn) {
 		const { salt, hash, ...user } = await User.findById(req.user.id).populate({
 			path: "server",
-			populate: {
-				path: "channels",
-				populate: {
-					path: "messages",
+			populate: [
+				{ path: "users" },
+				{
+					path: "channels",
+					populate: {
+						path: "messages",
+					},
 				},
-			},
+			],
 		});
+		console.log(user._doc.server[0].users);
 		res.status(200).json(user._doc);
 	} else {
 		res.json({ notfound: true });

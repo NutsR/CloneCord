@@ -1,10 +1,9 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import { useUser } from "../hooks/user";
 import { SocketContext } from "../hooks/socket.io.context";
 import { useSelect } from "../hooks/channel";
 function Chat() {
 	const socket = useContext(SocketContext);
-
 	const { user } = useUser();
 	const [messages, setMessages] = useState([]);
 	const { selected } = useSelect();
@@ -37,6 +36,7 @@ function Chat() {
 	}, [messages]);
 	return (
 		<div className="chat-container">
+			<div>{selected.name}</div>
 			<div className="chat-messages">
 				{messages.length
 					? messages.map((element, i) => (

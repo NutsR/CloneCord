@@ -1,7 +1,7 @@
 import Register from "./component/register";
 import Login from "./component/login";
 import { useUser } from "./hooks/user";
-import Channel from "./component/channel";
+import Main from "./component/main";
 import {
 	Outlet,
 	Route,
@@ -11,7 +11,8 @@ import {
 } from "react-router-dom";
 import { useEffect, useContext } from "react";
 import { SocketContext } from "./hooks/socket.io.context";
-import ChatChannel from "./component/idChat";
+import Channels from "./component/Channels";
+import HomeChannel from "./component/HomeChannel";
 function App() {
 	const socket = useContext(SocketContext);
 
@@ -39,8 +40,8 @@ function App() {
 	return (
 		<div className="App">
 			<Routes>
-				<Route path="/channels" element={<Channel />}>
-					<Route path=":id" element={<ChatChannel />} />
+				<Route path="/channels" element={<Main />}>
+					<Route path=":id" element={<Channels />} />
 				</Route>
 				<Route path="/login" element={<Login />} />
 				<Route path="/register" element={<Register />} />
