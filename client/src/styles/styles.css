@@ -9,15 +9,17 @@
 	flex-direction: column;
 	width: 6%;
 	background-color: #202225;
-	scrollbar-color: #202225 #2f3136;
 	color: #8e9297;
 	font-size: 16px;
 	line-height: 16px;
 	font-weight: 600;
-	display: flex;
 	overflow-y: scroll;
 	align-items: flex-end;
-	scroll-behavior: auto;
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+}
+.contacts-container::-webkit-scrollbar {
+	display: none;
 }
 .contacts-item {
 	padding: 15px 10px;
@@ -212,6 +214,7 @@
 	width: 61%;
 	border-bottom: 3px solid #2b2e33;
 	top: 0;
+	vertical-align: bottom;
 }
 .endRef {
 	margin-bottom: 9%;
@@ -233,6 +236,7 @@
 .category-add:hover .tooltiptext {
 	visibility: visible;
 }
+.channel-modal,
 .server-modal {
 	background-color: unset !important;
 	background-color: white !important;
@@ -249,7 +253,7 @@
 .ReactModalPortal .ReactModal__Overlay.ReactModal__Overlay--after-open {
 	background-color: rgba(6, 7, 8, 0.8) !important;
 }
-.close-modal{
+.close-modal {
 	background-color: white;
 	border: none;
 	cursor: pointer;
@@ -259,13 +263,73 @@
 	font-weight: 500;
 	color: #4f5660;
 }
-.modal-title{
+.modal-title {
 	font-size: 25px;
 	font-weight: 700;
 	text-align: center;
 	margin-bottom: 20px;
 }
-.modal-subtitle{
+.modal-subtitle {
 	font-size: 16px;
 	color: #4f5660;
+}
+.join-div,
+.create-div {
+	color: #4f5660;
+	text-transform: uppercase;
+	font-weight: 700;
+	font-size: 12px;
+	line-height: 16px;
+	margin-top: 15px;
+}
+.join-input-div > input,
+.create-input-div > input {
+	margin: 12px 0;
+	background-color: #e0e2e5;
+	width: 90%;
+	border: none;
+	padding: 12px 12px;
+	outline: none;
+	color: #2e3338;
+	font-weight: 600;
+}
+
+.modal-btn {
+	background-color: #5865f2;
+	color: #ffffff;
+	border: none;
+	font-weight: 600;
+	text-transform: capitalize;
+	float: right;
+	margin: 10px 0;
+	padding: 16px 14px;
+	border-radius: 3px;
+	font-size: 12px;
+	line-height: 16px;
+}
+
+.channel-modal {
+	background-color: #36393f !important;
+	color: #ffffff !important;
+}
+.channel-modal .create-input-div > input {
+	color: #ffffff !important;
+	background-color: #313339 !important;
+}
+.channel-modal .create-input-div > input::placeholder {
+	color: #54575d !important;
+}
+.channel-modal .create-div {
+	color: #dcddde !important;
+}
+.channel-modal {
+	height: 30%;
+	margin-top: 10%;
+}
+.channel-modal .close-modal {
+	color: #55585d;
+	background-color: #36393f;
+}
+.channel-modal .close-modal:hover {
+	color: #fff;
 }

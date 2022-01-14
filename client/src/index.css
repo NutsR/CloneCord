@@ -1,7 +1,6 @@
 body {
 	margin: 0;
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-		"Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+	font-family: Whitney, "Helvetica Neue", Helvetica, Arial, "Lucida Grande",
 		sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
@@ -15,7 +14,7 @@ ul {
 	list-style: none;
 	padding: none !important;
 }
-a{
+a {
 	text-decoration: none;
 }
 .container {
@@ -71,7 +70,6 @@ a{
 }
 .btn {
 	padding: 15px 32px;
-	
 }
 .btn-login {
 	margin-top: 13px;
@@ -83,7 +81,7 @@ a{
 	font-weight: 600;
 	font-size: small;
 }
-.join-btn{
+.join-btn {
 	border-radius: 50%;
 	width: 50px;
 	height: 50px;
@@ -164,41 +162,38 @@ a{
 	max-height: 190px;
 	overflow-y: scroll;
 	border: 2px solid #282a2e;
-	
-  
 }
-.dropdown-mm{
-  left: 470px;
+.dropdown-mm {
+	left: 470px;
 	width: 11.8vw;
 }
-.dropdown-dd{
-  left: 645px;
-  width: 7.5vw;
+.dropdown-dd {
+	left: 645px;
+	width: 7.5vw;
 }
-.dropdown-yy{
-  left: 760px;
-  width: 9vw;
+.dropdown-yy {
+	left: 760px;
+	width: 9vw;
 }
 .dropdown-ul {
 	padding: 0;
 	margin: 0;
 	list-style-type: none;
-
 }
 .dropdown-item {
 	padding: 7.5px;
 	padding-right: 8px;
 	font-weight: 600;
-  color: #dcddde;
+	color: #dcddde;
 }
 .dropdown-item:hover {
 	background-color: black;
 }
 
-.selected{
-  color: #dcddde;
-  font-weight: 600;
+.selected {
+	color: #dcddde;
+	font-weight: 600;
 }
-.selection{
+.selection {
 	background-color: #222428;
 }

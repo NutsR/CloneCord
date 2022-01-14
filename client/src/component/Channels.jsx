@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { useSelect } from "../hooks/channel";
 import Chat from "./chat";
 import { useServer } from "../hooks/server";
+import CreateChannelModal from "./channelModal";
 function Channels() {
 	const { id } = useParams();
 	const { server } = useServer();
@@ -33,9 +34,7 @@ function Channels() {
 				</div>
 				<div className="channel-subtitle">
 					<span className="category-name"> {" >"}Text Channels</span>{" "}
-					<div className="category-add">
-						&#65291;<div className="tooltiptext">Create Channel</div>
-					</div>
+					<CreateChannelModal />
 				</div>
 				{channel
 					? channel.length &&

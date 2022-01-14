@@ -46,12 +46,7 @@ function JoinServer() {
 	return (
 		<>
 			{" "}
-			<button
-				className="btn"
-				className="join-btn"
-				id="opener"
-				onClick={openModal}
-			>
+			<button className="join-btn" id="opener" onClick={openModal}>
 				+
 			</button>
 			<Modal
@@ -69,13 +64,25 @@ function JoinServer() {
 					start talking
 				</div>
 
-				<form onSubmit={handleCreate}>
-					<input type="text" name="serverName" />
-					<button className="btn">Create a server</button>
+				<form onSubmit={handleCreate} className="create-server">
+					<div className="create-div">
+						<label htmlFor="serverName">Server name</label>
+					</div>
+					<div className="create-input-div">
+						<input type="text" name="serverName" />
+					</div>
+					<button className="modal-btn">Create a server</button>
 				</form>
-				<form onSubmit={handleJoin}>
-					<input type="text" name="server_id" />
-					<button className="btn">Join</button>
+				<form onSubmit={handleJoin} className="join-server">
+					<div className="join-div">
+						<label className="join-server-label" htmlFor="server_id">
+							Server Name
+						</label>
+					</div>
+					<div className="join-input-div">
+						<input type="text" name="server_id" placeholder="Server ID" />
+					</div>
+					<button className="modal-btn">Join A server</button>
 				</form>
 			</Modal>
 		</>
