@@ -5,6 +5,10 @@ import { useSelect } from "../hooks/channel";
 function Chat() {
 	const socket = useContext(SocketContext);
 	const { user } = useUser();
+	const messagesEndRef = useRef(null);
+	const scrollToBottom = () => {
+		messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+	};
 	const [messages, setMessages] = useState([]);
 	const { selected } = useSelect();
 	const handleSubmit = (e) => {
@@ -29,6 +33,7 @@ function Chat() {
 		socket.on("receive-message", (message) => {
 			setMessages((msg) => [...msg, message]);
 		});
+		scrollToBottom();
 		return () => {
 			socket.off("receive-message");
 			socket.off("history");
@@ -51,6 +56,7 @@ function Chat() {
 								</div>
 						  ))
 						: null}
+					<div ref={messagesEndRef} className="endRef" />
 				</div>
 				<form className="chat-input" onSubmit={handleSubmit}>
 					<input type="text" name="inputMsg" />

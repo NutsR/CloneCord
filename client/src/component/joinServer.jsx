@@ -57,14 +57,23 @@ function JoinServer() {
 			<Modal
 				isOpen={modalIsOpen}
 				onRequestClose={closeModal}
+				className="server-modal"
 				contentLabel="Create or Join a server"
 			>
-				<button onClick={closeModal}>Close</button>
+				<button onClick={closeModal} className="close-modal">
+					X
+				</button>
+				<div className="modal-title">Create a server</div>
+				<div className="modal-subtitle">
+					Your server is where you and your friends hang out. Make yours and
+					start talking
+				</div>
+
 				<form onSubmit={handleCreate}>
 					<input type="text" name="serverName" />
 					<button className="btn">Create a server</button>
 				</form>
-				<form onSubmit={handleJoin} className="chat-input">
+				<form onSubmit={handleJoin}>
 					<input type="text" name="server_id" />
 					<button className="btn">Join</button>
 				</form>

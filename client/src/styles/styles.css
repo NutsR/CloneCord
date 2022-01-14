@@ -9,7 +9,7 @@
 	flex-direction: column;
 	width: 6%;
 	background-color: #202225;
-	scrollbar-color:#202225 #2f3136 ;
+	scrollbar-color: #202225 #2f3136;
 	color: #8e9297;
 	font-size: 16px;
 	line-height: 16px;
@@ -50,7 +50,7 @@
 	border-bottom: 1px solid #fff;
 	cursor: pointer;
 }
-.chat-input{
+.chat-input {
 	position: fixed;
 	bottom: 0;
 	background-color: #36393f;
@@ -81,9 +81,7 @@
 	margin-left: 5px;
 	overflow-wrap: break-word;
 }
-.messages:last-child{
-	margin-bottom: 10%;
-}
+
 .style-display {
 	border-radius: 50%;
 }
@@ -145,6 +143,7 @@
 }
 .channel-subtitle {
 	color: #8e9297;
+	margin-top: 10px;
 	margin-bottom: 5px;
 	text-transform: uppercase;
 	font-size: 13px;
@@ -167,6 +166,7 @@
 }
 .category-add {
 	margin-right: 5px;
+	cursor: pointer;
 }
 .category-add:hover {
 	color: #dcddde;
@@ -194,16 +194,16 @@
 	line-height: 16px;
 	padding: 12px 28px;
 }
-.user:hover{
+.user:hover {
 	background-color: #393c42;
 	color: #ffffff;
 }
-.chat-messages{
+.chat-messages {
 	overflow-y: scroll;
-	scrollbar-color:#202225 #2f3136 ;
+	scrollbar-color: #202225 #2f3136;
 	height: 92.6vh;
 }
-.header{
+.header {
 	position: fixed;
 	left: 23%;
 	height: 7%;
@@ -212,4 +212,60 @@
 	width: 61%;
 	border-bottom: 3px solid #2b2e33;
 	top: 0;
+}
+.endRef {
+	margin-bottom: 9%;
+}
+.category-add .tooltiptext {
+	visibility: hidden;
+	width: 120px;
+	background-color: #202225;
+	color: #fff;
+	text-align: center;
+	border-radius: 6px;
+	padding: 5px 0;
+	text-transform: capitalize;
+
+	/* Position the tooltip */
+	position: absolute;
+	z-index: 1;
+}
+.category-add:hover .tooltiptext {
+	visibility: visible;
+}
+.server-modal {
+	background-color: unset !important;
+	background-color: white !important;
+	position: absolute;
+	left: 36vw;
+	padding: 16px 32px;
+	height: 76%;
+	top: 10%;
+	width: 25vw;
+	color: #060607 !important;
+	border-radius: 5px;
+}
+
+.ReactModalPortal .ReactModal__Overlay.ReactModal__Overlay--after-open {
+	background-color: rgba(6, 7, 8, 0.8) !important;
+}
+.close-modal{
+	background-color: white;
+	border: none;
+	cursor: pointer;
+	position: relative;
+	float: left;
+	font-size: 18px;
+	font-weight: 500;
+	color: #4f5660;
+}
+.modal-title{
+	font-size: 25px;
+	font-weight: 700;
+	text-align: center;
+	margin-bottom: 20px;
+}
+.modal-subtitle{
+	font-size: 16px;
+	color: #4f5660;
 }

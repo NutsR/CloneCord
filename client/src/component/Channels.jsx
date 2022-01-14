@@ -33,7 +33,9 @@ function Channels() {
 				</div>
 				<div className="channel-subtitle">
 					<span className="category-name"> {" >"}Text Channels</span>{" "}
-					<span className="category-add">&#65291;</span>
+					<div className="category-add">
+						&#65291;<div className="tooltiptext">Create Channel</div>
+					</div>
 				</div>
 				{channel
 					? channel.length &&
