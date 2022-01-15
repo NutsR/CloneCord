@@ -103,6 +103,7 @@ io.on("connection", (socket) => {
 		socket.join(room);
 		socket.room = room;
 		const channel = await Channel.findById(room).populate("messages");
+
 		socket.emit("history", channel.messages);
 	});
 });

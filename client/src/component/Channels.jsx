@@ -12,7 +12,6 @@ function Channels() {
 	const [channel, setChannel] = useState([]);
 	const socket = useContext(SocketContext);
 	const handleClick = (chan) => {
-		console.log(chan);
 		socket.emit("join-channel", chan._id);
 		setSelected(chan);
 	};
@@ -26,15 +25,25 @@ function Channels() {
 			}
 		}
 	}, [selected]);
+	console.log(channel);
 	return (
 		<>
 			<div className="channels-container">
 				<div className="channel-title">
-					{channel.length && channel[0].server_name}
+					{channel.length && (
+						<div>
+							<div>{channel[0].server_name}</div>
+							<div>id: {channel[0]._id}</div>
+						</div>
+					)}
 				</div>
 				<div className="channel-subtitle">
 					<span className="category-name"> {" >"}Text Channels</span>{" "}
-					<CreateChannelModal />
+					<CreateChannelModal
+						server_id={channel.length && channel[0]._id}
+						handleClick={handleClick}
+						setChannel={setChannel}
+					/>
 				</div>
 				{channel
 					? channel.length &&

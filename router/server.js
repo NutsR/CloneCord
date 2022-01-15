@@ -21,15 +21,15 @@ router.post("/server/create", async (req, res) => {
 		await User.findByIdAndUpdate(req.user.id, {
 			$push: { server: server._id },
 		});
-		server.populate({ path: "channels" });
-		res.json(server.channels);
+		await server.populate({ path: "channels" });
+		res.json({ server });
 	}
 });
 router.post("/server/join", async (req, res) => {
 	if (req.session.loggedIn) {
 		const { serverId } = req.body;
 		const server = await joinServer(serverId, req.user.id);
-		res.json(server.channels);
+		res.json({ server });
 	}
 });
 async function createServer(serverName, userId) {
@@ -39,6 +39,7 @@ async function createServer(serverName, userId) {
 		users: [userId],
 	});
 	const channel = new Channel({ name: "General" });
+
 	server.channels.push(channel);
 	await channel.save();
 	await server.save();
@@ -47,14 +48,31 @@ async function createServer(serverName, userId) {
 	}
 }
 async function joinServer(serverId, userId) {
-	const server = await Servers.findOneAndUpdate(serverId, {
-		$push: {
-			users: userId,
-		},
-	});
+	const server = await Servers.findOneAndUpdate(
+		{ _id: serverId },
+		{
+			$push: {
+				users: userId,
+			},
+		}
+	);
 	await User.findByIdAndUpdate(userId, {
 		$push: { server: server._id },
 	});
 	return server.populate({ path: "channels" });
 }
+
+router.post("/channels/create", async (req, res) => {
+	const { server_id, channel_name } = req.body;
+	const server = await Servers.findById(server_id).populate({
+		path: "channels",
+		populate: { path: "messages" },
+	});
+	const channel = new Channel({ name: channel_name });
+	channel.messages = [];
+	server.channels.push(channel);
+	await channel.save();
+	await server.save();
+	res.json({ server, channel });
+});
 module.exports = router;

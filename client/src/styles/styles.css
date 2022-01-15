@@ -42,6 +42,7 @@
 	color: #dcddde;
 	margin-right: 20%;
 	margin-left: 23%;
+	min-height: 0;
 }
 .username {
 	color: #fff;
@@ -83,7 +84,9 @@
 	margin-left: 5px;
 	overflow-wrap: break-word;
 }
-
+.messages:first-child{
+	margin-top: auto;
+}
 .style-display {
 	border-radius: 50%;
 }
@@ -201,6 +204,8 @@
 	color: #ffffff;
 }
 .chat-messages {
+	display: flex;
+	flex-direction: column;
 	overflow-y: scroll;
 	scrollbar-color: #202225 #2f3136;
 	height: 92.6vh;
@@ -306,6 +311,7 @@
 	border-radius: 3px;
 	font-size: 12px;
 	line-height: 16px;
+	cursor: pointer;
 }
 
 .channel-modal {

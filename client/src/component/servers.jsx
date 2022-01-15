@@ -40,7 +40,7 @@ function Servers() {
 							</div>
 					  ))
 					: null}
-				<JoinServer />
+				<JoinServer handleServerSel={handleServerSel} />
 			</div>
 		</>
 	);

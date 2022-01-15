@@ -1,8 +1,9 @@
 import { useState } from "react";
 import Modal from "react-modal";
 
-function CreateChannelModal() {
+function CreateChannelModal({ server_id, handleClick, setChannel }) {
 	const [modalIsOpen, setIsOpen] = useState(false);
+	Modal.setAppElement(document.getElementById("add-opener"));
 	const openModal = () => {
 		setIsOpen(true);
 	};
@@ -10,7 +11,22 @@ function CreateChannelModal() {
 		setIsOpen(false);
 		console.log("click");
 	};
-	Modal.setAppElement(document.getElementById("add-opener"));
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		const channel_name = e.currentTarget.channel_name.value;
+		const res = await fetch("http://localhost:3001/api/channels/create", {
+			mode: "cors",
+			method: "post",
+			credentials: "include",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ channel_name, server_id }),
+		});
+		const { channel, server } = await res.json();
+		if (channel._id) {
+			handleClick(channel);
+			setIsOpen(false);
+		}
+	};
 	return (
 		<>
 			<div className="category-add" id="add-opener" onClick={openModal}>
@@ -25,7 +41,7 @@ function CreateChannelModal() {
 				<button className="close-modal" onClick={closeModal}>
 					X
 				</button>
-				<form>
+				<form onSubmit={handleSubmit}>
 					<div className="modal-title">Create a Text Channel</div>
 					<div className="create-div">
 						<label htmlFor="channel_name">Create a channel</label>
