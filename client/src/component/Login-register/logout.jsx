@@ -1,8 +1,9 @@
-import { useUser } from "../hooks/user";
-import { useEffect, useState, useCallback } from "react";
-import { socket } from "../App";
+import { useUser } from "../../hooks/user";
+import { useEffect, useState, useCallback, useContext } from "react";
+import { SocketContext } from "../../hooks/socket.io.context";
 function Logout() {
 	const { user, checkLogin } = useUser();
+	const socket = useContext(SocketContext);
 	const [logoutReq, setLogoutReq] = useState(false);
 	const handleLogout = useCallback(async () => {
 		await fetch("http://localhost:3001/api/logout", {
@@ -25,7 +26,8 @@ function Logout() {
 		}
 	}, [logoutReq, handleLogout]);
 	return (
-		<div>
+		<div className="logout">
+			<div className="title">{user.username}</div>
 			<button onClick={() => setLogoutReq(true)}>Logout</button>
 		</div>
 	);

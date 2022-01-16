@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useUser } from "../hooks/user";
-import SelectLogo from "../dist/downarrow.png";
-import DropDown from "./dropdown-component";
+import { useUser } from "../../hooks/user";
+import SelectLogo from "../../dist/downarrow.png";
+import DropDown from "../dropdown-component";
 import { Link, useNavigate } from "react-router-dom";
-import { months, days, years } from "../utils/item.js";
+import { months, days, years } from "../../utils/item.js";
 function Register({ handleClick }) {
 	const navigate = useNavigate();
 	const { user, checkLogin } = useUser();

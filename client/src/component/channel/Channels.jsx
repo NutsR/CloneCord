@@ -1,9 +1,9 @@
 import { useParams, Link } from "react-router-dom";
-import { SocketContext } from "../hooks/socket.io.context";
+import { SocketContext } from "../../hooks/socket.io.context";
 import { useContext, useEffect, useState } from "react";
-import { useSelect } from "../hooks/channel";
-import Chat from "./chat";
-import { useServer } from "../hooks/server";
+import { useSelect } from "../../hooks/channel";
+import Chat from "../chat/chat";
+import { useServer } from "../../hooks/server";
 import CreateChannelModal from "./channelModal";
 function Channels() {
 	const { id } = useParams();
@@ -25,7 +25,6 @@ function Channels() {
 			}
 		}
 	}, [selected]);
-	console.log(channel);
 	return (
 		<>
 			<div className="channels-container">

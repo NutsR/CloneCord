@@ -2,6 +2,18 @@
 	display: flex;
 	min-height: 100vh;
 }
+
+.loading-div {
+	width: 100vw;
+	height: 100vh;
+	position: absolute;
+	z-index: 1000;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: #202225;
+	color: white;
+}
 .contacts-container {
 	display: flex;
 	position: fixed;
@@ -47,7 +59,6 @@
 .username {
 	color: #fff;
 	font-weight: 600;
-	margin-left: 0px;
 }
 .username:hover {
 	border-bottom: 1px solid #fff;
@@ -79,13 +90,35 @@
 .chat-input > input:focus {
 	outline: none;
 }
-
-.messages {
-	margin-left: 5px;
-	overflow-wrap: break-word;
-}
-.messages:first-child{
+.message-container:first-child {
 	margin-top: auto;
+}
+.message-container {
+	display: flex;
+	margin-top: 20px;
+	margin-left: 15px;
+}
+.messages {
+	margin-left: 20px;
+	overflow-wrap: break-word;
+	margin-bottom: 10px;
+}
+.message-container .messages:first-child {
+	margin-top: auto;
+}
+.message-container .messages:last-child .msg {
+	margin-bottom: unset;
+	height: 7px;
+}
+.continue .messages .msg {
+	margin-top: unset;
+	margin-left: 55px;
+	height: 7px;
+}
+
+.continue .profile-pic,
+.continue .username {
+	display: none;
 }
 .style-display {
 	border-radius: 50%;
@@ -338,4 +371,44 @@
 }
 .channel-modal .close-modal:hover {
 	color: #fff;
+}
+.logout {
+	position: absolute;
+	background-color: #292b2f;
+	width: 16.22vw;
+	font-weight: 600;
+	font-size: 14px;
+	line-height: 18px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	padding: 5px;
+	color: #ffffff;
+	margin-left: 6%;
+	bottom: 0;
+}
+.logout > button {
+	border: none;
+	background-color: #292b2f;
+	color: #ed4245;
+	font-weight: 600;
+	line-height: 18px;
+	cursor: pointer;
+}
+.time {
+	color: #72767d;
+	margin-left: 5px;
+	font-size: 12px;
+}
+.profile-pic > img {
+	width: 40px;
+}
+.home {
+	border-bottom: #54575d;
+	border-width: 2px;
+	margin-right: 20px;
+}
+.dms{
+	position: absolute;
+	margin-left: 10%;
 }

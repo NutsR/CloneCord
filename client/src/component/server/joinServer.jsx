@@ -1,8 +1,8 @@
-import { useSelect } from "../hooks/channel";
+import { useSelect } from "../../hooks/channel";
 import { useState } from "react";
 import Modal from "react-modal";
-import { useUser } from "../hooks/user";
-import { useServer } from "../hooks/server";
+import { useUser } from "../../hooks/user";
+import { useServer } from "../../hooks/server";
 function JoinServer({ handleServerSel }) {
 	const { user } = useUser();
 	const { setServer } = useServer();

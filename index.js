@@ -90,7 +90,7 @@ io.on("connection", (socket) => {
 			const channel = await Channel.findById(data.channel_id);
 			const message = new Message({
 				...data,
-				time: new Date().toDateString(),
+				time: new Date(Date.now()).toLocaleString(),
 			});
 			channel.messages.push([message._id]);
 			await message.save();

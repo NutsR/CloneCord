@@ -1,7 +1,8 @@
 import { useState, useEffect, useContext, useRef } from "react";
-import { useUser } from "../hooks/user";
-import { SocketContext } from "../hooks/socket.io.context";
-import { useSelect } from "../hooks/channel";
+import { useUser } from "../../hooks/user";
+import { SocketContext } from "../../hooks/socket.io.context";
+import { useSelect } from "../../hooks/channel";
+import ProfilePng from "../../dist/user.png";
 function Chat() {
 	const socket = useContext(SocketContext);
 	const { user } = useUser();
@@ -46,13 +47,26 @@ function Chat() {
 				<div className="chat-messages">
 					{messages.length
 						? messages.map((element, i) => (
-								<div className="messages" key={i}>
-									<span className="username">
-										{element.username} at {element.time}
-									</span>
-									<p key={i} className="msg">
-										{element.message}
-									</p>
+								<div
+									key={i}
+									className={` ${
+										i !== 0 && element.username === messages[i - 1].username
+											? "continue"
+											: "message-container"
+									}`}
+								>
+									<div className="profile-pic">
+										<img src={ProfilePng} alt="profile" />
+									</div>
+									<div className="messages">
+										<span className="username">
+											{element.username}
+											<span className="time">{element.time}</span>
+										</span>
+										<p key={i} className="msg">
+											{element.message}
+										</p>
+									</div>
 								</div>
 						  ))
 						: null}

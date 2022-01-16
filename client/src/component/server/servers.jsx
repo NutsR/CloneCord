@@ -1,10 +1,10 @@
 import { useState, useContext } from "react";
-import { useUser } from "../hooks/user";
-import { useSelect } from "../hooks/channel";
+import { useUser } from "../../hooks/user";
+import { useSelect } from "../../hooks/channel";
 import { Link } from "react-router-dom";
 import JoinServer from "./joinServer";
-import { SocketContext } from "../hooks/socket.io.context";
-import { useServer } from "../hooks/server";
+import { SocketContext } from "../../hooks/socket.io.context";
+import { useServer } from "../../hooks/server";
 function Servers() {
 	const { user } = useUser();
 	const { server } = useServer();
@@ -22,6 +22,7 @@ function Servers() {
 				<div>
 					<Link to="/channels/@me">
 						<div className="server-icon" data-letters="DS"></div>
+						<hr className="home" />
 					</Link>
 				</div>
 				{user._id
