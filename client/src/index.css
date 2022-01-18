@@ -1,9 +1,13 @@
 body {
 	margin: 0;
-	font-family: Whitney, "Helvetica Neue", Helvetica, Arial, "Lucida Grande",
-		sans-serif;
+	font-family: Whitney, "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 16px;
+	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+	vertical-align: baseline;
 }
 
 code {
@@ -197,4 +201,3 @@ a {
 .selection {
 	background-color: #222428;
 }
-

@@ -8,7 +8,6 @@ function Conversations() {
 	const [messages, setMessages] = useState([]);
 	const { id } = useParams();
 	const { user } = useUser();
-	const { selected } = useSelect;
 	const messagesEndRef = useRef();
 	const socket = useContext(SocketContext);
 	const scrollToBottom = () => {
@@ -49,8 +48,8 @@ function Conversations() {
 	};
 	return (
 		<>
-			<div className="header">Direct Messaging</div>
-			<div className="chat-container">
+			<div className="dm-header">Direct Messaging</div>
+			<div className="dm-container">
 				<div className="chat-messages">
 					{messages.length
 						? messages.map((element, i) => (

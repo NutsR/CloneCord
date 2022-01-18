@@ -112,37 +112,41 @@ io.on("connection", (socket) => {
 		socket.emit("history", channel.messages);
 	});
 	socket.on("sent-dm", async (obj) => {
-		const ifexist = await DirectMessage.findOne({
-			// prettier-ignore
-			$all:{
-			"users": [
-				mongoose.Types.ObjectId(obj.channel_id),
-				mongoose.Types.ObjectId(obj.sender),
-			],
-		},
-		});
 		const message = new Message({
 			user_id: obj.sender,
 			message: obj.message,
 			username: obj.username,
 			time: new Date(),
 		});
-		if ((ifexist && ifexist.length <= 0) || !ifexist._id) {
-			const dm = new DirectMessage({
-				users: [obj.channel_id, obj.sender],
-				messages: [message._id],
+		try {
+			const ifexist = await DirectMessage.findOne({
+				// prettier-ignore
+				"users": {$all: [
+				mongoose.Types.ObjectId(obj.channel_id),
+				mongoose.Types.ObjectId(obj.sender),
+			]},
 			});
-			await message.save();
-			await dm.save();
-			socket.emit("dm-join", dm);
-			socket.emit("receive-dm", message);
-			return;
+			if (!ifexist) {
+				const dm = new DirectMessage({
+					users: [obj.channel_id, obj.sender],
+					messages: [message._id],
+				});
+				await message.save();
+				await dm.save();
+				socket.emit("dm-join", dm);
+				socket.emit("receive-dm", message);
+				return;
+			}
+			if (ifexist._id) {
+				ifexist.messages.push(message._id);
+				await ifexist.save();
+				await message.save();
+				socket.emit("dm-join", ifexist);
+				io.to(socket.dm).emit("receive-dm", message);
+			}
+		} catch (err) {
+			console.log("inside if exist error", err);
 		}
-		ifexist.messages.push(message._id);
-		await ifexist.save();
-		await message.save();
-		socket.emit("dm-join", ifexist);
-		io.to(socket.dm).emit("receive-dm", message);
 	});
 	socket.on("get-dms", async (user) => {
 		const dms = await DirectMessage.find({

@@ -49,7 +49,7 @@ function Chat() {
 	}, [messages]);
 	return (
 		<>
-			<div className="header">{selected.name}</div>
+			<div className="header">#{selected.name}</div>
 			<div className="chat-container">
 				<div className="chat-messages">
 					{messages.length
