@@ -16,6 +16,8 @@ const serverRoutes = require("./router/server");
 const { userAuth, sessionStore } = require("./middleware/userAuth");
 const Message = require("./models/message");
 const Channel = require("./models/channel");
+const DirectMessage = require("./models/direct-message");
+const mongoose = require("mongoose");
 const io = new Server(server, {
 	cors: { origin: "http://localhost:3000", methods: ["GET", "POST"] },
 });
@@ -90,7 +92,7 @@ io.on("connection", (socket) => {
 			const channel = await Channel.findById(data.channel_id);
 			const message = new Message({
 				...data,
-				time: new Date(Date.now()).toLocaleString(),
+				time: new Date(),
 			});
 			channel.messages.push([message._id]);
 			await message.save();
@@ -99,12 +101,76 @@ io.on("connection", (socket) => {
 			return;
 		}
 	});
+	socket.on("join-self", (userId) => {
+		socket.join(userId);
+		socket.selfRoom = userId;
+	});
 	socket.on("join-channel", async (room) => {
 		socket.join(room);
 		socket.room = room;
 		const channel = await Channel.findById(room).populate("messages");
-
 		socket.emit("history", channel.messages);
+	});
+	socket.on("sent-dm", async (obj) => {
+		const ifexist = await DirectMessage.findOne({
+			// prettier-ignore
+			$all:{
+			"users": [
+				mongoose.Types.ObjectId(obj.channel_id),
+				mongoose.Types.ObjectId(obj.sender),
+			],
+		},
+		});
+		const message = new Message({
+			user_id: obj.sender,
+			message: obj.message,
+			username: obj.username,
+			time: new Date(),
+		});
+		if ((ifexist && ifexist.length <= 0) || !ifexist._id) {
+			const dm = new DirectMessage({
+				users: [obj.channel_id, obj.sender],
+				messages: [message._id],
+			});
+			await message.save();
+			await dm.save();
+			socket.emit("dm-join", dm);
+			socket.emit("receive-dm", message);
+			return;
+		}
+		ifexist.messages.push(message._id);
+		await ifexist.save();
+		await message.save();
+		socket.emit("dm-join", ifexist);
+		io.to(socket.dm).emit("receive-dm", message);
+	});
+	socket.on("get-dms", async (user) => {
+		const dms = await DirectMessage.find({
+			//prettier-ignore
+			"users": mongoose.Types.ObjectId(user),
+		}).populate("users");
+		socket.emit("dms-list", dms);
+	});
+	socket.on("join-dm", async (dmId) => {
+		const dm = await DirectMessage.findById(dmId)
+			.populate("users")
+			.populate("messages");
+		socket.dm = dmId;
+		socket.join(dmId);
+		socket.emit("dm-history", dm);
+	});
+	socket.on("send-dm", async (messageObj) => {
+		if (socket.dm) {
+			const message = new Message({
+				...messageObj,
+				time: new Date(),
+			});
+			const dm = await DirectMessage.findById(messageObj.channel_id);
+			dm.messages.push(message._id);
+			await message.save();
+			await dm.save();
+			io.to(socket.dm).emit("receive-dm", message);
+		}
 	});
 });
 server.listen(3001, () => {

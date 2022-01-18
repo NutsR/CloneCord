@@ -5,11 +5,13 @@ import { useSelect } from "../../hooks/channel";
 import Chat from "../chat/chat";
 import { useServer } from "../../hooks/server";
 import CreateChannelModal from "./channelModal";
+import ProfileDropdown from "../dropdowns/profile";
 function Channels() {
 	const { id } = useParams();
 	const { server } = useServer();
 	const { selected, setSelected } = useSelect();
 	const [channel, setChannel] = useState([]);
+	const [profile, showProfile] = useState({});
 	const socket = useContext(SocketContext);
 	const handleClick = (chan) => {
 		socket.emit("join-channel", chan._id);
@@ -47,7 +49,11 @@ function Channels() {
 				{channel
 					? channel.length &&
 					  channel[0].channels.map((chan) => (
-							<span key={chan._id} onClick={() => handleClick(chan)}>
+							<div
+								key={chan._id}
+								onClick={() => handleClick(chan)}
+								className="transi-in"
+							>
 								<Link to={`/channels/${chan._id}`}>
 									<span
 										className={`channel-link ${
@@ -58,7 +64,7 @@ function Channels() {
 										{chan.name}
 									</span>
 								</Link>
-							</span>
+							</div>
 					  ))
 					: null}
 			</div>
@@ -67,13 +73,29 @@ function Channels() {
 				<div className="online">
 					Users- {channel.length && channel[0].users.length}
 				</div>
-				{channel.length &&
-					channel[0].users.map((userObj) => (
-						<div key={userObj._id} className="user">
-							{userObj.username}
-							{channel[0].creator === userObj._id ? <span>&#128081;</span> : ""}
-						</div>
-					))}
+				<div>
+					{channel.length &&
+						channel[0].users.map((userObj) => (
+							<div key={userObj._id}>
+								<div
+									className="user"
+									onClick={() =>
+										showProfile((u) => (u._id === userObj._id ? {} : userObj))
+									}
+								>
+									{userObj.username}
+									{channel[0].creator === userObj._id ? (
+										<span>&#128081;</span>
+									) : (
+										""
+									)}
+								</div>
+							</div>
+						))}
+					{profile._id && (
+						<ProfileDropdown userObj={profile} showProfile={showProfile} />
+					)}
+				</div>
 			</div>
 		</>
 	);

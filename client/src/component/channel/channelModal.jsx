@@ -23,7 +23,13 @@ function CreateChannelModal({ server_id, handleClick, setChannel }) {
 		});
 		const { channel, server } = await res.json();
 		if (channel._id) {
-			handleClick(channel);
+			setChannel((chan) => {
+				const newChan = chan.map((server) => {
+					server.channels.push(channel);
+					return server;
+				});
+				return newChan;
+			});
 			setIsOpen(false);
 		}
 	};

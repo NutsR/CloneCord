@@ -13,6 +13,7 @@ import { useEffect, useContext } from "react";
 import { SocketContext } from "./hooks/socket.io.context";
 import Channels from "./component/channel/Channels";
 import HomeChannel from "./component/channel/HomeChannel";
+import Conversation from "./component/chat/conversation";
 function App() {
 	const socket = useContext(SocketContext);
 
@@ -41,7 +42,9 @@ function App() {
 		<div className="App">
 			<Routes>
 				<Route path="/channels" element={<Main />}>
-					<Route path="/channels/@me" element={<HomeChannel />} />
+					<Route path="/channels/@me" element={<HomeChannel />}>
+						<Route path="/channels/@me/:id" element={<Conversation />}></Route>
+					</Route>
 					<Route path=":id" element={<Channels />} />
 				</Route>
 				<Route path="/login" element={<Login />} />

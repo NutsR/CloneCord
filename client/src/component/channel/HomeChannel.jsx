@@ -1,43 +1,64 @@
 import { SocketContext } from "../../hooks/socket.io.context";
 import { useContext, useState, useEffect } from "react";
 import { useUser } from "../../hooks/user";
-import { useNavigate } from "react-router-dom";
-import Chat from "../chat/chat";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 function HomeChannel() {
 	const [contacts, setContacts] = useState([]);
 	const { user } = useUser();
+	const location = useLocation();
 	const navigate = useNavigate();
 	const socket = useContext(SocketContext);
-	const handleClick = (joined) => {
-		if (user.socket_id !== joined) {
-			socket.emit("create-join-room", joined);
-			navigate(`/channels/@me/${user._id}`);
-		}
+	const handleJoin = (dm) => {
+		navigate(dm._id);
+		socket.emit("join-dm", dm._id);
 	};
 	useEffect(() => {
-		socket.on("users", (users) => {
-			console.log(users);
-			setContacts(users);
+		socket.emit("get-dms", user._id);
+		socket.on("dms-list", (dm) => {
+			setContacts(dm);
 		});
-		return () => socket.off("users");
-	});
+		return () => {
+			socket.off("dms-list");
+		};
+	}, [socket]);
 	return (
 		<>
 			<div className="dms">
-				<span className="contact-title">Direct Message</span>
-				{contacts.map((contact) => (
-					<div
-						key={contact.userID}
-						onClick={() => handleClick(contact.userID)}
-						className="contacts-item"
-					>
-						{contact.username === user.username
-							? `${contact.username}(You)`
-							: contact.username}
-					</div>
-				))}
+				<div className="contact-title">Direct Message</div>
+				<div>
+					{contacts.length ? (
+						contacts.map((dm, i) => {
+							return (
+								<div key={i}>
+									{dm.users.map((userObj, i) => {
+										if (userObj._id !== user._id) {
+											return (
+												<div key={i + 500} onClick={() => handleJoin(dm)}>
+													{userObj.username}
+												</div>
+											);
+										}
+										return null;
+									})}
+								</div>
+							);
+						})
+					) : (
+						<div>You have no contacts</div>
+					)}
+				</div>
+				<div className="server-users">
+					Active users
+					<div></div>
+				</div>
 			</div>
-			<Chat />
+			{location.pathname === "/channels/@me" ? (
+				<div className="chat-empty">
+					<span>Select a user to chat or Create/Join a server</span>
+				</div>
+			) : (
+				<Outlet />
+			)}
 		</>
 	);
 }

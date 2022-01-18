@@ -17,6 +17,7 @@
 .contacts-container {
 	display: flex;
 	position: fixed;
+	z-index: 10000;
 	height: 100%;
 	flex-direction: column;
 	width: 6%;
@@ -107,6 +108,7 @@
 	margin-top: auto;
 }
 .message-container .messages:last-child .msg {
+	margin-top: 5px;
 	margin-bottom: unset;
 	height: 7px;
 }
@@ -140,7 +142,6 @@
 .server-icon {
 	margin: 5px 0;
 }
-
 .channels-container {
 	width: 17%;
 	background-color: #2f3136;
@@ -241,12 +242,12 @@
 	flex-direction: column;
 	overflow-y: scroll;
 	scrollbar-color: #202225 #2f3136;
-	height: 92.6vh;
+	height: 90vh;
 }
 .header {
 	position: fixed;
 	left: 23%;
-	height: 7%;
+	height: 9.45%;
 	background-color: #2f3136;
 	color: #ffffff;
 	width: 61%;
@@ -283,12 +284,14 @@
 	padding: 16px 32px;
 	height: 76%;
 	top: 10%;
+	z-index: 100023;
 	width: 25vw;
 	color: #060607 !important;
 	border-radius: 5px;
 }
 
 .ReactModalPortal .ReactModal__Overlay.ReactModal__Overlay--after-open {
+	z-index: 100004;
 	background-color: rgba(6, 7, 8, 0.8) !important;
 }
 .close-modal {
@@ -319,6 +322,26 @@
 	font-size: 12px;
 	line-height: 16px;
 	margin-top: 15px;
+}
+.join-btn{
+	min-height: 1%;
+	border: none;
+	color: #3ba55d;
+	font-size: 25px;
+	font-weight: 600;
+	vertical-align: middle;
+	background-color: #36393f;
+	transition: color 200ms ease-in;
+	transition: background-color 300ms ease-in;
+	transition: border-radius 500ms linear;
+}
+.join-btn:hover{
+	background-color: #3ba55d;
+	border-radius: 10px;
+	color: #36393f;
+	transition: color 500ms ease-in;
+	transition: background-color 300ms ease-in;
+	transition: border-radius 500ms linear;
 }
 .join-input-div > input,
 .create-input-div > input {
@@ -408,7 +431,53 @@
 	border-width: 2px;
 	margin-right: 20px;
 }
-.dms{
+.dms {
 	position: absolute;
-	margin-left: 10%;
+	margin-left: 6%;
+	background-color: #2f3136;
+	height: 100%;
+	color: #ffffff;
+	width: 17%;
+}
+
+.profile-dropdown {
+	position: relative;
+	background-color: #18191c;
+	box-shadow: 0px 6px 8px 0px #313339;
+	z-index: 5;
+	border-radius: 6px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	right: 16vw;
+	height: 22vh;
+	width: 20vw;
+}
+.profile-dropdown .input {
+	width: 15vw;
+}
+.profile-dropdown .input::placeholder{
+	text-transform: capitalize;
+}
+.close-dropdown {
+	padding-right: 10px;
+	position: absolute;
+	right: 0;
+	top: 0;
+	margin-top: 20px;
+	cursor: pointer;
+	font-weight: 600;
+}
+.chat-empty {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-width: 61%;
+	font-weight: 600;
+	background-color: #36393f;
+	color: #dcddde;
+	margin-right: 20%;
+	margin-left: 23%;
+	min-height: 0;
 }

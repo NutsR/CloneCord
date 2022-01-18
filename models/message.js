@@ -9,7 +9,8 @@ const messageSchema = new Schema({
 	channel_id: String,
 	user_id: String,
 	username: String,
-	time: String,
+	time: Date,
+	date: Date,
 });
 
 const Message = mongoose.model("Message", messageSchema);

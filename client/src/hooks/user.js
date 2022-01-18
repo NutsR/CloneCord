@@ -1,5 +1,4 @@
 import { useContext, useState, createContext, useEffect } from "react";
-import { socket } from "../App";
 import { useNavigate } from "react-router-dom";
 import { SocketContext } from "./socket.io.context";
 import { useLocation } from "react-router-dom";
@@ -27,19 +26,19 @@ function UserProvider({ children }) {
 
 		const data = await res.json();
 		if (data._id) {
-			setUser(data);
+			setUser((u) => ({ ...data, socket_id: u.socket_id }));
 			setLoader(false);
 			const sessionID = localStorage.getItem(`${data.username}`);
 			if (sessionID) {
 				socket.auth = { username: data.username, sessionID: sessionID };
 				if (!location.pathname.includes("channels")) {
-					navigate("/channels");
+					navigate("/channels/@me");
 				}
 				return socket.connect();
 			}
 			socket.auth = { username: data.username, sessionID: "" };
 			if (!location.pathname.includes("channels")) {
-				navigate("/channels");
+				navigate("/channels/@me");
 			}
 			return socket.connect();
 		}
@@ -48,7 +47,8 @@ function UserProvider({ children }) {
 	};
 	useEffect(() => {
 		socket.on("connect", () => {
-			setUser((u) => ({ ...u, socket_id: "" }));
+			setUser((u) => ({ ...u, socket_id: u.socket_id }));
+			socket.emit("join-self", user._id);
 		});
 		checkLogin();
 	}, []);

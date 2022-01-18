@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const passportLocalMongoose = require("passport-local-mongoose");
-const { nanoid } = require("nanoid");
 const userSchema = new Schema({
 	email: {
 		type: String,
@@ -9,6 +8,7 @@ const userSchema = new Schema({
 		unique: true,
 	},
 	server: [{ type: String, ref: "Server" }],
+	messages: [{ type: Schema.Types.ObjectId }],
 });
 
 userSchema.plugin(passportLocalMongoose);
