@@ -7,7 +7,6 @@
 		"start": "node index",
 		"server": "nodemon index",
 		"client": "npm start --prefix client",
-		"build": "cd client/ && npm install && npm run build",
 		"dev": "concurrently \"npm run client\" \"npm run server\" "
 	},
 	"cacheDirectories": [
