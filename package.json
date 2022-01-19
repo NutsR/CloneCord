@@ -3,10 +3,6 @@
 	"version": "1.0.0",
 	"description": "CloneCord",
 	"main": "index.js",
-	"engines": {
-		"node": "^10.15.3",
-		"npm": "6.4.1"
-	},
 	"scripts": {
 		"start": "node index",
 		"server": "nodemon index",
