@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-
+const Message = require("./message");
 const channelSchema = new Schema({
 	name: {
 		type: String,
@@ -10,4 +10,13 @@ const channelSchema = new Schema({
 });
 
 const Channel = mongoose.model("Channel", channelSchema);
+channelSchema.post("findOneAndDelete", async (channel) => {
+	if (channel.message && channel.messages.length) {
+		await Message.deleteMany({
+			_id: {
+				$in: Channel.messages,
+			},
+		});
+	}
+});
 module.exports = Channel;

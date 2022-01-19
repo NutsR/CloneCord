@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { SocketContext } from "../../hooks/socket.io.context";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef, createRef } from "react";
 import { useSelect } from "../../hooks/channel";
 import Chat from "../chat/chat";
 import { useServer } from "../../hooks/server";
@@ -11,11 +11,23 @@ function Channels() {
 	const { server } = useServer();
 	const { selected, setSelected } = useSelect();
 	const [channel, setChannel] = useState([]);
+	const channelsRef = useRef();
+	const [menu, setMenu] = useState({});
 	const [profile, showProfile] = useState({});
 	const socket = useContext(SocketContext);
 	const handleClick = (chan) => {
 		socket.emit("join-channel", chan._id);
+		if (channelsRef.current) {
+			setMenu({});
+			channelsRef.current.style.display = "none";
+		}
 		setSelected(chan);
+	};
+	const closeMenu = (e) => {
+		if (channelsRef.current && !channelsRef.current.contains(e.target)) {
+			setMenu({});
+			channelsRef.current.style.display = "none";
+		}
 	};
 	useEffect(() => {
 		if (server.length) {
@@ -26,7 +38,36 @@ function Channels() {
 				setChannel(getCorrectServer);
 			}
 		}
+		document.addEventListener("mousedown", closeMenu);
+		return () => {
+			document.removeEventListener("mousedown", closeMenu);
+		};
 	}, [selected]);
+	const handleDelete = async () => {
+		const res = await fetch(
+			`${process.env.REACT_APP_public_url}/api/channels/delete`,
+			{
+				method: "delete",
+				mode: "cors",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ id: menu.id }),
+			}
+		);
+		const data = await res.json();
+		if (data.deleted) {
+			setChannel((chan) => {
+				const newChan = chan.map((server) => {
+					server.channels = server.channels.filter((channel) => {
+						if (channel._id !== data.deleted_id) {
+							return channel;
+						}
+					});
+					return server;
+				});
+				return newChan;
+			});
+		}
+	};
 	return (
 		<>
 			<div className="channels-container">
@@ -47,25 +88,47 @@ function Channels() {
 					/>
 				</div>
 				{channel
-					? channel.length &&
-					  channel[0].channels.map((chan) => (
-							<div
-								key={chan._id}
-								onClick={() => handleClick(chan)}
-								className="transi-in"
-							>
-								<Link to={`/channels/${chan._id}`}>
-									<span
-										className={`channel-link ${
-											selected._id === chan._id ? "channel-selected" : ""
-										}`}
+					? channel.length && (
+							<>
+								{channel[0].channels.map((chan, i) => (
+									<div
+										key={chan._id}
+										onClick={() => handleClick(chan)}
+										onContextMenu={(e) => {
+											e.preventDefault();
+											if (channelsRef.current) {
+												channelsRef.current.style.left = `${
+													e.pageX > 200 ? e.pageX - 70 : e.pageX - 25
+												}px`;
+												channelsRef.current.style.top = e.pageY + "px";
+												channelsRef.current.style.display = "block";
+												setMenu({ id: chan._id });
+											}
+										}}
+										className="transi-in"
 									>
-										<span className="hashtag">#</span>
-										{chan.name}
-									</span>
-								</Link>
-							</div>
-					  ))
+										<Link to={`/channels/${chan._id}`}>
+											<span
+												className={`channel-link ${
+													selected._id === chan._id ? "channel-selected" : ""
+												}`}
+											>
+												<span className="hashtag">#</span>
+												{chan.name}
+											</span>
+										</Link>
+									</div>
+								))}
+								<div ref={channelsRef} className="context-menu">
+									{menu.id && (
+										<div onClick={handleDelete}>
+											Delete Channel (instantly deletes and all messages)
+											{menu.id}
+										</div>
+									)}
+								</div>
+							</>
+					  )
 					: null}
 			</div>
 			{selected._id && <Chat />}

@@ -532,3 +532,14 @@
 	background-color: #393c42;
 	border-radius: 5px;
 }
+
+.context-menu{
+	position: absolute;
+	display: none;
+	border-radius: 5px;
+	width: 120px;
+	padding: 10px 10px;
+	background-color: #18191c;
+	text-align: center;
+	color: #ed424e;
+}

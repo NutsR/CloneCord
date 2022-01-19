@@ -75,4 +75,10 @@ router.post("/channels/create", async (req, res) => {
 	await server.save();
 	res.json({ server, channel });
 });
+
+router.delete("/channels/delete", async (req, res) => {
+	const { id } = req.body;
+	await Channel.findByIdAndDelete(id);
+	res.json({ deleted: true, deleted_id: id });
+});
 module.exports = router;
