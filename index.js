@@ -58,13 +58,6 @@ app.use("*", async (req, res, next) => {
 });
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-if (process.env.NODE_ENV === "production") {
-	app.use(express.static(path.join(__dirname, "client/build")));
-
-	app.get("*", function (req, res) {
-		res.sendFile(path.join(__dirname, "client/build", "index.html"));
-	});
-}
 app.use("/api", registerRoutes, userRoutes, serverRoutes);
 io.use(userAuth);
 io.on("connection", (socket) => {
@@ -178,6 +171,13 @@ io.on("connection", (socket) => {
 		}
 	});
 });
+if (process.env.NODE_ENV === "production") {
+	app.use(express.static(path.join(__dirname, "client/build")));
+
+	app.get("*", function (req, res) {
+		res.sendFile(path.join(__dirname, "client/build", "index.html"));
+	});
+}
 server.listen(3001, () => {
 	console.log("on port 3001");
 });
