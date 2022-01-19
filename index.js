@@ -179,6 +179,6 @@ if (process.env.NODE_ENV === "production") {
 		res.sendFile(path.join(__dirname, "client/build", "index.html"));
 	});
 }
-server.listen(3001, () => {
+server.listen(process.env.PORT || 3001, () => {
 	console.log("on port 3001");
 });
