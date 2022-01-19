@@ -15,7 +15,7 @@ function CreateChannelModal({ server_id, handleClick, setChannel }) {
 		e.preventDefault();
 		const channel_name = e.currentTarget.channel_name.value;
 		const res = await fetch(
-			`${process.env.REACT_APP_public_url}/api/channels/create`,
+			`${process.env.REACT_APP_public_url}api/channels/create`,
 			{
 				mode: "cors",
 				method: "post",

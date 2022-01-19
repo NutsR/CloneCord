@@ -14,7 +14,7 @@ function Login({ handleClick }) {
 			navigate("/channels");
 		}
 		e.preventDefault();
-		await fetch(`${process.env.REACT_APP_public_url}/api/login`, {
+		await fetch(`${process.env.REACT_APP_public_url || ""}api/login`, {
 			method: "POST",
 			mode: "cors",
 			credentials: "include",
