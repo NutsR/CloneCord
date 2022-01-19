@@ -14,13 +14,16 @@ function CreateChannelModal({ server_id, handleClick, setChannel }) {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		const channel_name = e.currentTarget.channel_name.value;
-		const res = await fetch("http://localhost:3001/api/channels/create", {
-			mode: "cors",
-			method: "post",
-			credentials: "include",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ channel_name, server_id }),
-		});
+		const res = await fetch(
+			`${process.env.REACT_APP_public_url}/api/channels/create`,
+			{
+				mode: "cors",
+				method: "post",
+				credentials: "include",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ channel_name, server_id }),
+			}
+		);
 		const { channel, server } = await res.json();
 		if (channel._id) {
 			setChannel((chan) => {

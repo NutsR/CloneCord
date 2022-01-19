@@ -19,7 +19,7 @@ function UserProvider({ children }) {
 	const [loader, setLoader] = useState(true);
 
 	const checkLogin = async () => {
-		const res = await fetch("http://localhost:3001/api/user", {
+		const res = await fetch(`${process.env.REACT_APP_public_url}/api/user`, {
 			method: "GET",
 			credentials: "include",
 		});
@@ -34,7 +34,7 @@ function UserProvider({ children }) {
 				if (!location.pathname.includes("channels")) {
 					navigate("/channels/@me");
 				}
-				return socket.connect();
+				return socket.connect(process.env.REACT_APP_public_url);
 			}
 			socket.auth = { username: data.username, sessionID: "" };
 			if (!location.pathname.includes("channels")) {

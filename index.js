@@ -1,3 +1,6 @@
+if (process.env.NODE_ENV !== "production") {
+	require("dotenv").config();
+}
 const express = require("express");
 const http = require("http");
 const path = require("path");
@@ -21,8 +24,6 @@ const mongoose = require("mongoose");
 const io = new Server(server, {
 	cors: { origin: "http://localhost:3000", methods: ["GET", "POST"] },
 });
-global.io = io;
-
 app.use(
 	cors({
 		origin: "http://localhost:3000",

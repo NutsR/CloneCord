@@ -6,7 +6,7 @@ function Logout() {
 	const socket = useContext(SocketContext);
 	const [logoutReq, setLogoutReq] = useState(false);
 	const handleLogout = useCallback(async () => {
-		await fetch("http://localhost:3001/api/logout", {
+		await fetch(`${process.env.REACT_APP_public_url}/api/logout`, {
 			method: "POST",
 			mode: "cors",
 			credentials: "include",

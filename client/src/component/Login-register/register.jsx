@@ -22,7 +22,7 @@ function Register({ handleClick }) {
 			navigate("/channels");
 		}
 		e.preventDefault();
-		await fetch("http://localhost:3001/api/register", {
+		await fetch(`${process.env.REACT_APP_public_url}/api/register`, {
 			method: "POST",
 			mode: "cors",
 			credentials: "include",

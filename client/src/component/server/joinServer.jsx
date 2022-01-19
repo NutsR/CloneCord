@@ -1,4 +1,3 @@
-import { useSelect } from "../../hooks/channel";
 import { useState } from "react";
 import Modal from "react-modal";
 import { useUser } from "../../hooks/user";
@@ -6,19 +5,21 @@ import { useServer } from "../../hooks/server";
 function JoinServer({ handleServerSel }) {
 	const { user } = useUser();
 	const { setServer } = useServer();
-	const { setSelected } = useSelect();
 	const [modalIsOpen, setIsOpen] = useState(false);
 	Modal.setAppElement(document.getElementById("opener"));
 	const handleJoin = async (e) => {
 		e.preventDefault();
 		const serverId = e.currentTarget.server_id.value;
-		const res = await fetch("http://localhost:3001/api/server/join", {
-			mode: "cors",
-			credentials: "include",
-			method: "post",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ serverId }),
-		});
+		const res = await fetch(
+			`${process.env.REACT_APP_public_url}/api/server/join`,
+			{
+				mode: "cors",
+				credentials: "include",
+				method: "post",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ serverId }),
+			}
+		);
 		const data = await res.json();
 		if (data.server._id) {
 			handleServerSel(data.server);
@@ -29,15 +30,18 @@ function JoinServer({ handleServerSel }) {
 	const handleCreate = async (e) => {
 		e.preventDefault();
 		const serverName = e.currentTarget.serverName.value;
-		const res = await fetch("http://localhost:3001/api/server/create", {
-			method: "post",
-			credentials: "include",
-			mode: "cors",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({ serverName, user: user._id }),
-		});
+		const res = await fetch(
+			`${process.env.REACT_APP_public_url}/api/server/create`,
+			{
+				method: "post",
+				credentials: "include",
+				mode: "cors",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ serverName, user: user._id }),
+			}
+		);
 		const data = await res.json();
 		if (data.server._id) {
 			handleServerSel(data.server);
