@@ -171,7 +171,7 @@ io.on("connection", (socket) => {
 		}
 	});
 });
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV !== "development") {
 	console.log("hi");
 	app.use(express.static(path.join(__dirname, "client/build")));
 
