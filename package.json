@@ -3,11 +3,17 @@
 	"version": "1.0.0",
 	"description": "CloneCord",
 	"main": "index.js",
+	"engines": {
+		"node": "10.15.3",
+		"npm": "6.4.1"
+	},
 	"scripts": {
 		"start": "node index",
 		"server": "nodemon index",
+		"build": "cd client && npm run build",
 		"client": "npm start --prefix client",
-		"dev": "concurrently \"npm run client\" \"npm run server\" "
+		"dev": "concurrently \"npm run client\" \"npm run server\" ",
+		"heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
 	},
 	"cacheDirectories": [
 		"node_modules",

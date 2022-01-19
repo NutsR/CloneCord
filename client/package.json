@@ -3,6 +3,10 @@
 	"version": "0.1.0",
 	"private": true,
 	"proxy": "https://clone-cord-v2.herokuapp.com",
+	"engines": {
+		"node": "10.15.3",
+		"npm": "6.4.1"
+	},
 	"dependencies": {
 		"@testing-library/jest-dom": "^5.16.1",
 		"@testing-library/react": "^12.1.2",
