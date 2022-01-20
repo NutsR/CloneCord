@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Modal from "react-modal";
 
-function CreateChannelModal({ server_id, handleClick, setChannel }) {
+function CreateChannelModal({ server_id, setChannel }) {
 	const [modalIsOpen, setIsOpen] = useState(false);
 	Modal.setAppElement(document.getElementById("add-opener"));
 	const openModal = () => {
@@ -26,13 +26,7 @@ function CreateChannelModal({ server_id, handleClick, setChannel }) {
 		);
 		const { channel, server } = await res.json();
 		if (channel._id) {
-			setChannel((chan) => {
-				const newChan = chan.map((server) => {
-					server.channels.push(channel);
-					return server;
-				});
-				return newChan;
-			});
+			setChannel((chan) => (chan = [server]));
 			setIsOpen(false);
 		}
 	};

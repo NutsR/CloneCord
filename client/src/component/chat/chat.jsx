@@ -52,37 +52,41 @@ function Chat() {
 			<div className="header">#{selected.name}</div>
 			<div className="chat-container">
 				<div className="chat-messages">
-					{messages.length
-						? messages.map((element, i) => (
-								<div
-									key={i}
-									className={` ${
-										i !== 0 &&
-										(element.user_id === messages[i - 1].user_id) &
-											(element.time.getTime() <
-												messages[i - 1].time.getTime() + 2 * 60000)
-											? "continue"
-											: "message-container"
-									}`}
-								>
-									<div className="profile-pic">
-										<img src={ProfilePng} alt="profile" />
-									</div>
-									<div className="messages">
-										<span className="username">
-											{element.username}
-											<span className="time">
-												{element.time.toLocaleTimeString()}{" "}
-												{element.time.toLocaleDateString()}
-											</span>
-										</span>
-										<p key={i} className="msg">
-											{element.message}
-										</p>
-									</div>
+					{messages.length ? (
+						messages.map((element, i) => (
+							<div
+								key={i}
+								className={` ${
+									i !== 0 &&
+									(element.user_id === messages[i - 1].user_id) &
+										(element.time.getTime() <
+											messages[i - 1].time.getTime() + 2 * 60000)
+										? "continue"
+										: "message-container"
+								}`}
+							>
+								<div className="profile-pic">
+									<img src={ProfilePng} alt="profile" />
 								</div>
-						  ))
-						: null}
+								<div className="messages">
+									<span className="username">
+										{element.username}
+										<span className="time">
+											{element.time.toLocaleTimeString()}{" "}
+											{element.time.toLocaleDateString()}
+										</span>
+									</span>
+									<p key={i} className="msg">
+										{element.message}
+									</p>
+								</div>
+							</div>
+						))
+					) : (
+						<div className="no-message">
+							Create history! Send the first message
+						</div>
+					)}
 					<div ref={messagesEndRef} className="endRef" />
 				</div>
 				<form className="chat-input" onSubmit={handleSubmit}>

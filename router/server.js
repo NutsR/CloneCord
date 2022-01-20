@@ -32,6 +32,25 @@ router.post("/server/join", async (req, res) => {
 		res.json({ server });
 	}
 });
+
+router.post("/server/leave", async (req, res) => {
+	const { id, user } = req.body;
+	try {
+		await Servers.findByIdAndUpdate(id, {
+			$pull: {
+				users: user._id,
+			},
+		});
+		await User.findByIdAndUpdate(user._id, {
+			$pull: {
+				server: id,
+			},
+		});
+		res.json({ success: true });
+	} catch (err) {
+		res.status(500).json(err);
+	}
+});
 async function createServer(serverName, userId) {
 	const server = new Servers({
 		server_name: serverName,

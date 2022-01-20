@@ -17,7 +17,6 @@
 .contacts-container {
 	display: flex;
 	position: fixed;
-	z-index: 10000;
 	height: 100%;
 	flex-direction: column;
 	width: 6%;
@@ -138,6 +137,7 @@
 }
 .server-icon[data-letters]:before {
 	content: attr(data-letters);
+	text-transform: capitalize;
 	display: inline-block;
 	font-size: 1em;
 	width: 3.1em;
@@ -157,7 +157,7 @@
 	width: 17%;
 	background-color: #2f3136;
 	color: #ffffff;
-	position: fixed;
+	position: absolute;
 	margin-left: 6%;
 	height: 100%;
 }
@@ -518,22 +518,22 @@
 .dm-users .profile-pic {
 	margin-left: 5px;
 }
-.dm-users .profile-pic > img{
+.dm-users .profile-pic > img {
 	width: 35px;
 }
-.dm-users:hover{
+.dm-users:hover {
 	background-color: rgba(57, 60, 66, 0.7);
 	border-radius: 5px;
 }
 .dm-username {
 	margin-left: 10px;
 }
-.dm-selected{
+.dm-selected {
 	background-color: #393c42;
 	border-radius: 5px;
 }
 
-.context-menu{
+.context-menu {
 	position: absolute;
 	display: none;
 	border-radius: 5px;
@@ -541,5 +541,27 @@
 	padding: 10px 10px;
 	background-color: #18191c;
 	text-align: center;
-	color: #ed424e;
+	color: #ffffff;
+	border: 3px solid #18191c;
+	background: linear-gradient(to left, #18191c 50%, #ed424e 50%) right;
+	background-size: 200%;
+	transition: 1s ease-out;
+	cursor: pointer;
+	z-index: 10000;
+}
+
+.context-menu:active {
+	background-position: left;
+	transition: 2s ease-out;
+}
+.context-menu.creator{
+	background: #18191c;
+}
+
+.no-message{
+	font-size: 25px;
+	text-align: center;
+	vertical-align: middle;
+	margin-top: 50%;
+	font-weight: 600;
 }

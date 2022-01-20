@@ -11,7 +11,7 @@ function JoinServer({ handleServerSel }) {
 		e.preventDefault();
 		const serverId = e.currentTarget.server_id.value;
 		const res = await fetch(
-			`${process.env.REACT_APP_public_url}api/server/join`,
+			`${process.env.REACT_APP_public_url}/api/server/join`,
 			{
 				mode: "cors",
 				credentials: "include",

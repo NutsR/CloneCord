@@ -11,7 +11,7 @@ const channelSchema = new Schema({
 
 const Channel = mongoose.model("Channel", channelSchema);
 channelSchema.post("findOneAndDelete", async (channel) => {
-	if (channel.message && channel.messages.length) {
+	if (channel.messages && channel.messages.length) {
 		await Message.deleteMany({
 			_id: {
 				$in: Channel.messages,

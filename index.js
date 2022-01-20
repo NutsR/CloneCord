@@ -102,9 +102,12 @@ io.on("connection", (socket) => {
 	socket.on("join-channel", async (room) => {
 		socket.join(room);
 		socket.room = room;
-		const channel = await Channel.findById(room).populate("messages");
-		if (channel.messages.length) {
+		try {
+			const channel = await Channel.findById(room).populate("messages");
+
 			socket.emit("history", channel.messages);
+		} catch (err) {
+			console.log(err);
 		}
 	});
 	socket.on("sent-dm", async (obj) => {

@@ -6,6 +6,7 @@ import Chat from "../chat/chat";
 import { useServer } from "../../hooks/server";
 import CreateChannelModal from "./channelModal";
 import ProfileDropdown from "../dropdowns/profile";
+import useLongPress from "../../hooks/Longpress";
 function Channels() {
 	const { id } = useParams();
 	const { server } = useServer();
@@ -14,6 +15,9 @@ function Channels() {
 	const channelsRef = useRef();
 	const [menu, setMenu] = useState({});
 	const [profile, showProfile] = useState({});
+	const longPress = useLongPress(handleDelete, () => console.log("nothing"), {
+		delay: 1990,
+	});
 	const socket = useContext(SocketContext);
 	const handleClick = (chan) => {
 		socket.emit("join-channel", chan._id);
@@ -43,7 +47,7 @@ function Channels() {
 			document.removeEventListener("mousedown", closeMenu);
 		};
 	}, [selected]);
-	const handleDelete = async () => {
+	async function handleDelete(e) {
 		const res = await fetch(
 			`${process.env.REACT_APP_public_url}/api/channels/delete`,
 			{
@@ -66,8 +70,10 @@ function Channels() {
 				});
 				return newChan;
 			});
+			setMenu({});
+			channelsRef.current && (channelsRef.current.style.display = "none");
 		}
-	};
+	}
 	return (
 		<>
 			<div className="channels-container">
@@ -92,7 +98,7 @@ function Channels() {
 							<>
 								{channel[0].channels.map((chan, i) => (
 									<div
-										key={chan._id}
+										key={i}
 										onClick={() => handleClick(chan)}
 										onContextMenu={(e) => {
 											e.preventDefault();
@@ -120,12 +126,7 @@ function Channels() {
 									</div>
 								))}
 								<div ref={channelsRef} className="context-menu">
-									{menu.id && (
-										<div onClick={handleDelete}>
-											Delete Channel (instantly deletes and all messages)
-											{menu.id}
-										</div>
-									)}
+									{menu.id && <div {...longPress}>Delete Channel (Hold)</div>}
 								</div>
 							</>
 					  )
