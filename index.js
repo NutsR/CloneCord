@@ -22,6 +22,8 @@ const Channel = require("./models/channel");
 const DirectMessage = require("./models/direct-message");
 const mongoose = require("mongoose");
 const io = new Server(server, {
+	pingInterval: 15000,
+	pingTimeout: 30000,
 	cors: { origin: "http://localhost:3000", methods: ["GET", "POST"] },
 });
 app.use(

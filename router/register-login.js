@@ -6,7 +6,6 @@ router.post("/register", async (req, res) => {
 	try {
 		const { email, username, password } = req.body;
 		const user = new User({ email, username });
-		user.conversation = [];
 		const registered = await User.register(user, password);
 		req.login(registered, (err) => {
 			if (err) next(err);
@@ -25,8 +24,8 @@ router.post("/login", passport.authenticate("local"), async (req, res) => {
 
 router.post("/logout", (req, res) => {
 	if (req.user) {
-		req.logout();
 		req.session.loggedIn = null;
+		req.logout();
 		return res.json({ success: true });
 	}
 });
