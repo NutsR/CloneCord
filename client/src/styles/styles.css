@@ -565,3 +565,14 @@
 	margin-top: 50%;
 	font-weight: 600;
 }
+.server-info{
+	position: relative;
+	font-size: 35px;
+	margin-top: 10px;
+	font-weight: 700;
+	float: right;
+}
+.serv-info{
+	position: absolute;
+	display: block !important;
+}

@@ -48,6 +48,17 @@ router.post("/server/leave", async (req, res) => {
 		});
 		res.json({ success: true });
 	} catch (err) {
+		console.log(err);
+		res.status(500).json(err);
+	}
+});
+router.delete("/server/delete", async (req, res) => {
+	const { id } = req.body;
+	try {
+		await Servers.findByIdAndDelete(id);
+
+		res.json({ success: true });
+	} catch (err) {
 		res.status(500).json(err);
 	}
 });

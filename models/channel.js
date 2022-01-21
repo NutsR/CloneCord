@@ -9,14 +9,15 @@ const channelSchema = new Schema({
 	messages: [{ type: Schema.Types.ObjectId, ref: "Message" }],
 });
 
-const Channel = mongoose.model("Channel", channelSchema);
 channelSchema.post("findOneAndDelete", async (channel) => {
-	if (channel.messages && channel.messages.length) {
+	if (channel && channel.messages && channel.messages.length) {
 		await Message.deleteMany({
 			_id: {
-				$in: Channel.messages,
+				$in: channel.messages,
 			},
 		});
 	}
 });
+const Channel = mongoose.model("Channel", channelSchema);
+
 module.exports = Channel;

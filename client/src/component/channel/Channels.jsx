@@ -1,24 +1,37 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { SocketContext } from "../../hooks/socket.io.context";
-import { useContext, useEffect, useState, useRef, createRef } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { useSelect } from "../../hooks/channel";
 import Chat from "../chat/chat";
 import { useServer } from "../../hooks/server";
 import CreateChannelModal from "./channelModal";
 import ProfileDropdown from "../dropdowns/profile";
+import { useUser } from "../../hooks/user";
 import useLongPress from "../../hooks/Longpress";
 function Channels() {
 	const { id } = useParams();
-	const { server } = useServer();
+	const { server, setServer } = useServer();
+	const { user, setUser } = useUser();
 	const { selected, setSelected } = useSelect();
+	const navigate = useNavigate();
 	const [channel, setChannel] = useState([]);
-	const channelsRef = useRef();
 	const [menu, setMenu] = useState({});
+	const [servMenu, setServMenu] = useState(false);
 	const [profile, showProfile] = useState({});
-	const longPress = useLongPress(handleDelete, () => console.log("nothing"), {
+
+	const channelsRef = useRef();
+	const serverRef = useRef();
+
+	const channelDelete = useLongPress(handleDelete, () => {}, {
 		delay: 1990,
 	});
+
+	const serverDelete = useLongPress(handleServerDel, () => {}, {
+		delay: 1990,
+	});
+
 	const socket = useContext(SocketContext);
+
 	const handleClick = (chan) => {
 		socket.emit("join-channel", chan._id);
 		if (channelsRef.current) {
@@ -27,12 +40,17 @@ function Channels() {
 		}
 		setSelected(chan);
 	};
+
 	const closeMenu = (e) => {
 		if (channelsRef.current && !channelsRef.current.contains(e.target)) {
 			setMenu({});
 			channelsRef.current.style.display = "none";
 		}
+		if (serverRef.current && !serverRef.current.contains(e.target)) {
+			setServMenu(false);
+		}
 	};
+
 	useEffect(() => {
 		if (server.length) {
 			const getCorrectServer = server.filter((serv) =>
@@ -47,6 +65,7 @@ function Channels() {
 			document.removeEventListener("mousedown", closeMenu);
 		};
 	}, [selected]);
+
 	async function handleDelete(e) {
 		const res = await fetch(
 			`${process.env.REACT_APP_public_url}/api/channels/delete`,
@@ -74,16 +93,72 @@ function Channels() {
 			channelsRef.current && (channelsRef.current.style.display = "none");
 		}
 	}
+
+	async function handleServerDel() {
+		if (channel.length) {
+			const id = channel[0]._id;
+			console.log(id);
+			const res = await fetch(
+				`${process.env.REACT_APP_public_url}/api/server/delete`,
+				{
+					mode: "cors",
+					method: "delete",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ id }),
+				}
+			);
+			const data = await res.json();
+			if (data.success) {
+				setServMenu(false);
+				setUser((u) => {
+					u.server = u.server.filter((s) => {
+						if (s._id !== id) {
+							return s;
+						}
+					});
+					return u;
+				});
+				setServer((s) => {
+					const newServers = s.filter((serv) => {
+						if (serv._id !== id) {
+							return serv;
+						}
+					});
+					return newServers;
+				});
+				navigate("/channels/@me");
+			}
+		}
+	}
+
 	return (
 		<>
 			<div className="channels-container">
 				<div className="channel-title">
 					{channel.length && (
 						<div>
+							<div
+								className="server-info"
+								onClick={(e) => {
+									setServMenu(!servMenu);
+									if (serverRef.current) {
+										serverRef.current.style.left = `${e.pageX}px`;
+										serverRef.current.style.top = e.pageY + "px";
+									}
+								}}
+							>
+								&#8942;
+							</div>
+
 							<div>{channel[0].server_name}</div>
 							<div>id: {channel[0]._id}</div>
 						</div>
 					)}
+					{servMenu && user._id === channel[0].creator ? (
+						<div ref={serverRef} className="context-menu serv-info">
+							<div {...serverDelete}>Delete Server (hold)</div>
+						</div>
+					) : null}
 				</div>
 				<div className="channel-subtitle">
 					<span className="category-name"> {" >"}Text Channels</span>{" "}
@@ -93,6 +168,7 @@ function Channels() {
 						setChannel={setChannel}
 					/>
 				</div>
+
 				{channel
 					? channel.length && (
 							<>
@@ -126,7 +202,9 @@ function Channels() {
 									</div>
 								))}
 								<div ref={channelsRef} className="context-menu">
-									{menu.id && <div {...longPress}>Delete Channel (Hold)</div>}
+									{menu.id && (
+										<div {...channelDelete}>Delete Channel (Hold)</div>
+									)}
 								</div>
 							</>
 					  )
