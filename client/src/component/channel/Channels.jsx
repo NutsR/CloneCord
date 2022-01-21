@@ -1,13 +1,13 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { SocketContext } from "../../hooks/socket.io.context";
-import { useContext, useEffect, useState, useRef } from "react";
+import { useContext, useEffect, useState, useRef, Suspense, lazy } from "react";
 import { useSelect } from "../../hooks/channel";
 import Chat from "../chat/chat";
 import { useServer } from "../../hooks/server";
-import CreateChannelModal from "./channelModal";
 import ProfileDropdown from "../dropdowns/profile";
 import { useUser } from "../../hooks/user";
 import useLongPress from "../../hooks/Longpress";
+const CreateChannelModal = lazy(() => import("./channelModal"));
 function Channels() {
 	const { id } = useParams();
 	const { server, setServer } = useServer();
@@ -162,11 +162,13 @@ function Channels() {
 				</div>
 				<div className="channel-subtitle">
 					<span className="category-name"> {" >"}Text Channels</span>{" "}
-					<CreateChannelModal
-						server_id={channel.length && channel[0]._id}
-						handleClick={handleClick}
-						setChannel={setChannel}
-					/>
+					<Suspense fallback={<div>Loading</div>}>
+						<CreateChannelModal
+							server_id={channel.length && channel[0]._id}
+							handleClick={handleClick}
+							setChannel={setChannel}
+						/>
+					</Suspense>
 				</div>
 
 				{channel

@@ -1,12 +1,12 @@
-import { useState, useContext, useRef, useEffect } from "react";
+import { useState, useContext, useRef, useEffect, Suspense, lazy } from "react";
 import { useUser } from "../../hooks/user";
 import { useSelect } from "../../hooks/channel";
 import { Link } from "react-router-dom";
-import JoinServer from "./joinServer";
+
 import { SocketContext } from "../../hooks/socket.io.context";
 import { useServer } from "../../hooks/server";
 import useLongPress from "../../hooks/Longpress";
-
+const JoinServer = lazy(() => import("./joinServer"));
 function Servers() {
 	const { user, setUser } = useUser();
 	const { server, setServer } = useServer();
@@ -113,8 +113,9 @@ function Servers() {
 							</div>
 					  ))
 					: null}
-
-				<JoinServer handleServerSel={handleServerSel} />
+				<Suspense fallback={<div>Loading</div>}>
+					<JoinServer handleServerSel={handleServerSel} />
+				</Suspense>
 			</div>
 
 			<div

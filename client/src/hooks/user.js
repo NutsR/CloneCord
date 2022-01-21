@@ -6,7 +6,6 @@ const UserContext = createContext();
 export const initState = {
 	username: `guest${Math.floor(Math.random() * 12000) + 1}`,
 	id: "",
-	socket_id: "",
 };
 export function useUser() {
 	return useContext(UserContext);
@@ -26,30 +25,17 @@ function UserProvider({ children }) {
 
 		const data = await res.json();
 		if (data._id) {
-			setUser((u) => ({ ...data, socket_id: u.socket_id }));
+			setUser(data);
 			setLoader(false);
-			const sessionID = localStorage.getItem(`${data.username}`);
-			if (sessionID) {
-				socket.auth = { username: data.username, sessionID: sessionID };
-				if (!location.pathname.includes("channels")) {
-					navigate("/channels/@me");
-				}
-				return socket.connect(process.env.REACT_APP_public_url);
-			}
-			socket.auth = { username: data.username, sessionID: "" };
 			if (!location.pathname.includes("channels")) {
 				navigate("/channels/@me");
 			}
-			return socket.connect();
+			return socket.connect(process.env.REACT_APP_public_url);
 		}
 		setUser(initState);
 		setLoader(false);
 	};
 	useEffect(() => {
-		socket.on("connect", () => {
-			setUser((u) => ({ ...u, socket_id: u.socket_id }));
-			socket.emit("join-self", user._id);
-		});
 		checkLogin();
 	}, []);
 	return (

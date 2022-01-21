@@ -1,31 +1,48 @@
 if (process.env.NODE_ENV !== "production") {
 	require("dotenv").config();
 }
+// Packages
 const express = require("express");
 const http = require("http");
 const path = require("path");
 const { Server } = require("socket.io");
-const dbConnect = require("./lib/connection");
 const passport = require("passport");
-const User = require("./models/user");
 const LocalStrategy = require("passport-local");
 const session = require("express-session");
 const cors = require("cors");
+
+// server
 const app = express();
 const server = http.createServer(app);
+
+// Local Requires
+const dbConnect = require("./lib/connection");
+const User = require("./models/user");
 const registerRoutes = require("./router/register-login");
 const userRoutes = require("./router/user");
 const serverRoutes = require("./router/server");
-const { userAuth, sessionStore } = require("./middleware/userAuth");
-const Message = require("./models/message");
-const Channel = require("./models/channel");
-const DirectMessage = require("./models/direct-message");
-const mongoose = require("mongoose");
+
+// Socket functions
+const {
+	sentMessage,
+	joinSelf,
+	joinChannel,
+	getDms,
+	joinDm,
+	sendDm,
+	sentDm,
+} = require("./controller/socket.io.controller");
+
+// IO server
+
 const io = new Server(server, {
 	pingInterval: 15000,
 	pingTimeout: 30000,
 	cors: { origin: "http://localhost:3000", methods: ["GET", "POST"] },
 });
+
+// Middleware and app.use //
+// Session and cors //
 app.use(
 	cors({
 		origin: "http://localhost:3000",
@@ -36,7 +53,7 @@ app.use(
 app.use(
 	session({
 		name: "free cookies",
-		secret: "idgafsodgaf",
+		secret: "needstobemoresecure",
 		resave: true,
 		sameSite: "none",
 		secure: false,
@@ -48,136 +65,66 @@ app.use(
 		},
 	})
 );
-app.use(passport.initialize());
-app.use(passport.session());
-passport.use(new LocalStrategy(User.authenticate()));
 
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+//Mongoose connection //
+
 app.use("*", async (req, res, next) => {
 	await dbConnect();
 	next();
 });
+
+// Passport //
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+// Body Parser //
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// routes
+
 app.use("/api", registerRoutes, userRoutes, serverRoutes);
-io.use(userAuth);
+
+// IO And Socket.on Stuff //
+
 io.on("connection", (socket) => {
 	app.set("socket", socket);
-	sessionStore.saveSession(socket.handshake.auth.sessionID, {
-		userID: socket.userID,
-		username: socket.username,
-		connected: true,
-	});
-	socket.emit("session", {
-		sessionID: socket.sessionID,
-		userID: socket.userID,
-	});
-	socket.join(socket.userID);
-	const users = [];
-	sessionStore.findAllSessions().forEach((session) => {
-		users.push({
-			userID: session.userID,
-			username: session.username,
-			connected: session.connected,
-		});
-	});
-	socket.emit("users", users);
-	socket.on("sent-message", async (data) => {
-		if (socket.room) {
-			const channel = await Channel.findById(data.channel_id);
-			const message = new Message({
-				...data,
-				time: new Date(),
-			});
-			channel.messages.push([message._id]);
-			await message.save();
-			await channel.save();
-			io.to(socket.room).emit("receive-message", message);
-			return;
-		}
-	});
-	socket.on("join-self", (userId) => {
-		socket.join(userId);
-		socket.selfRoom = userId;
-	});
-	socket.on("join-channel", async (room) => {
-		socket.join(room);
-		socket.room = room;
-		try {
-			const channel = await Channel.findById(room).populate("messages");
 
-			socket.emit("history", channel.messages);
-		} catch (err) {
-			console.log(err);
-		}
+	//Sent message //
+	socket.on("sent-message", (data) => {
+		sentMessage(socket, io, data);
 	});
-	socket.on("sent-dm", async (obj) => {
-		const message = new Message({
-			user_id: obj.sender,
-			message: obj.message,
-			username: obj.username,
-			time: new Date(),
-		});
-		try {
-			const ifexist = await DirectMessage.findOne({
-				// prettier-ignore
-				"users": {$all: [
-				mongoose.Types.ObjectId(obj.channel_id),
-				mongoose.Types.ObjectId(obj.sender),
-			]},
-			});
-			if (!ifexist) {
-				const dm = new DirectMessage({
-					users: [obj.channel_id, obj.sender],
-					messages: [message._id],
-				});
-				await message.save();
-				await dm.save();
-				socket.emit("dm-join", dm);
-				socket.emit("receive-dm", message);
-				return;
-			}
-			if (ifexist._id) {
-				ifexist.messages.push(message._id);
-				await ifexist.save();
-				await message.save();
-				socket.emit("dm-join", ifexist);
-				io.to(socket.dm).emit("receive-dm", message);
-			}
-		} catch (err) {
-			console.log("inside if exist error", err);
-		}
+	// Joins self after connection
+	socket.on("join-self", (userId) => {
+		joinSelf(socket, userId);
 	});
-	socket.on("get-dms", async (user) => {
-		const dms = await DirectMessage.find({
-			//prettier-ignore
-			"users": mongoose.Types.ObjectId(user),
-		}).populate("users");
-		socket.emit("dms-list", dms);
+	// join channel
+	socket.on("join-channel", (room) => {
+		joinChannel(socket, room);
 	});
-	socket.on("join-dm", async (dmId) => {
-		const dm = await DirectMessage.findById(dmId)
-			.populate("users")
-			.populate("messages");
-		socket.dm = dmId;
-		socket.join(dmId);
-		socket.emit("dm-history", dm);
+	// received direct message
+	socket.on("sent-dm", (obj) => {
+		sentDm(socket, obj);
 	});
-	socket.on("send-dm", async (messageObj) => {
-		if (socket.dm) {
-			const message = new Message({
-				...messageObj,
-				time: new Date(),
-			});
-			const dm = await DirectMessage.findById(messageObj.channel_id);
-			dm.messages.push(message._id);
-			await message.save();
-			await dm.save();
-			io.to(socket.dm).emit("receive-dm", message);
-		}
+	// get direct message history
+	socket.on("get-dms", (user) => {
+		getDms(socket, user);
+	});
+	// join direct message
+	socket.on("join-dm", (dmId) => {
+		joinDm(socket, dmId);
+	});
+	// send direct message
+	socket.on("send-dm", (messageObj) => {
+		sendDm(socket, messageObj);
 	});
 });
+
 if (process.env.NODE_ENV === "production") {
 	console.log("hi");
 	app.use(express.static(path.join(__dirname, "client/build")));
@@ -186,6 +133,7 @@ if (process.env.NODE_ENV === "production") {
 		res.sendFile(path.join(__dirname, "client/build", "index.html"));
 	});
 }
+
 server.listen(process.env.PORT || 3001, () => {
 	console.log("on port 3001");
 });

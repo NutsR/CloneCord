@@ -1,56 +1,74 @@
-import Register from "./component/Login-register/register";
-import Login from "./component/Login-register/login";
-import { useUser } from "./hooks/user";
-import Main from "./component/main/main";
-import {
-	Outlet,
-	Route,
-	Routes,
-	useLocation,
-	useNavigate,
-} from "react-router-dom";
-import { useEffect, useContext } from "react";
-import { SocketContext } from "./hooks/socket.io.context";
-import Channels from "./component/channel/Channels";
-import HomeChannel from "./component/channel/HomeChannel";
-import Conversation from "./component/chat/conversation";
+import { lazy, Suspense } from "react";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+const Login = lazy(() => import("./component/Login-register/login"));
+const Main = lazy(() => import("./component/main/main"));
+const Channels = lazy(() => import("./component/channel/Channels"));
+const HomeChannel = lazy(() => import("./component/channel/HomeChannel"));
+const Conversation = lazy(() => import("./component/chat/conversation"));
+const Register = lazy(() => import("./component/Login-register/register"));
 function App() {
-	const socket = useContext(SocketContext);
-
-	const { user, setUser } = useUser();
 	const location = useLocation();
 	const navigate = useNavigate();
 	useEffect(() => {
 		if (location.pathname === "/") {
 			navigate("/login");
 		}
-		socket.on("session", ({ sessionID, userID }) => {
-			if (!user.username.includes("guest")) {
-				const existingSession = localStorage.getItem(`${user.username}`);
-				if (!existingSession) {
-					localStorage.setItem(`${user.username}`, sessionID);
-					socket.auth = { sessionID };
-					socket.userID = userID;
-					setUser((u) => ({ ...u, socket_id: userID }));
-				}
-				setUser((u) => ({ ...u, socket_id: userID }));
-				socket.auth = { sessionID: existingSession };
-			}
-		});
 	});
 	return (
 		<div className="App">
 			<Routes>
-				<Route path="/channels" element={<Main />}>
-					<Route path="/channels/@me" element={<HomeChannel />}>
-						<Route path="/channels/@me/:id" element={<Conversation />}></Route>
+				<Route
+					path="/channels"
+					element={
+						<Suspense fallback={<div className="loading-div">Loading</div>}>
+							<Main />
+						</Suspense>
+					}
+				>
+					<Route
+						path="/channels/@me"
+						element={
+							<Suspense fallback={<div className="loading-div">Loading</div>}>
+								<HomeChannel />
+							</Suspense>
+						}
+					>
+						<Route
+							path="/channels/@me/:id"
+							element={
+								<Suspense fallback={<div className="loading-div">Loading</div>}>
+									<Conversation />
+								</Suspense>
+							}
+						></Route>
 					</Route>
-					<Route path=":id" element={<Channels />} />
+					<Route
+						path=":id"
+						element={
+							<Suspense fallback={<div className="loading-div">Loading</div>}>
+								<Channels />
+							</Suspense>
+						}
+					/>
 				</Route>
-				<Route path="/login" element={<Login />} />
-				<Route path="/register" element={<Register />} />
+				<Route
+					path="/login"
+					element={
+						<Suspense fallback={<div className="loading-div">Loading</div>}>
+							<Login />
+						</Suspense>
+					}
+				/>
+				<Route
+					path="/register"
+					element={
+						<Suspense fallback={<div className="loading-div">Loading</div>}>
+							<Register />
+						</Suspense>
+					}
+				/>
 			</Routes>
-			<Outlet />
 		</div>
 	);
 }
