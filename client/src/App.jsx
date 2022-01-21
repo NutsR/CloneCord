@@ -20,23 +20,23 @@ function App() {
 	const { user, setUser } = useUser();
 	const location = useLocation();
 	const navigate = useNavigate();
-	socket.on("session", ({ sessionID, userID }) => {
-		if (!user.username.includes("guest")) {
-			const existingSession = localStorage.getItem(`${user.username}`);
-			if (!existingSession) {
-				localStorage.setItem(`${user.username}`, sessionID);
-				socket.auth = { sessionID };
-				socket.userID = userID;
-				setUser((u) => ({ ...u, socket_id: userID }));
-			}
-			setUser((u) => ({ ...u, socket_id: userID }));
-			socket.auth = { sessionID: existingSession };
-		}
-	});
 	useEffect(() => {
 		if (location.pathname === "/") {
 			navigate("/login");
 		}
+		socket.on("session", ({ sessionID, userID }) => {
+			if (!user.username.includes("guest")) {
+				const existingSession = localStorage.getItem(`${user.username}`);
+				if (!existingSession) {
+					localStorage.setItem(`${user.username}`, sessionID);
+					socket.auth = { sessionID };
+					socket.userID = userID;
+					setUser((u) => ({ ...u, socket_id: userID }));
+				}
+				setUser((u) => ({ ...u, socket_id: userID }));
+				socket.auth = { sessionID: existingSession };
+			}
+		});
 	});
 	return (
 		<div className="App">

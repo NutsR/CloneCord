@@ -16,7 +16,7 @@ function Logout() {
 			body: JSON.stringify(user),
 		});
 		if (logoutReq) {
-			socket.disconnect();
+			socket.close();
 		}
 	}, [user, logoutReq]);
 	useEffect(() => {
