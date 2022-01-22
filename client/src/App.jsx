@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import LoadingDiv from "./App-styled";
 const Login = lazy(() => import("./component/Login-register/login"));
 const Main = lazy(() => import("./component/main/main"));
 const Channels = lazy(() => import("./component/channel/Channels"));
@@ -21,7 +22,7 @@ function App() {
 				<Route
 					path="/channels"
 					element={
-						<Suspense fallback={<div className="loading-div">Loading</div>}>
+						<Suspense fallback={<LoadingDiv>Loading</LoadingDiv>}>
 							<Main />
 						</Suspense>
 					}
@@ -29,7 +30,7 @@ function App() {
 					<Route
 						path="/channels/@me"
 						element={
-							<Suspense fallback={<div className="loading-div">Loading</div>}>
+							<Suspense fallback={<LoadingDiv>Loading</LoadingDiv>}>
 								<HomeChannel />
 							</Suspense>
 						}
@@ -37,7 +38,7 @@ function App() {
 						<Route
 							path="/channels/@me/:id"
 							element={
-								<Suspense fallback={<div className="loading-div">Loading</div>}>
+								<Suspense fallback={<LoadingDiv>Loading</LoadingDiv>}>
 									<Conversation />
 								</Suspense>
 							}
@@ -46,7 +47,7 @@ function App() {
 					<Route
 						path=":id"
 						element={
-							<Suspense fallback={<div className="loading-div">Loading</div>}>
+							<Suspense fallback={<LoadingDiv>Loading</LoadingDiv>}>
 								<Channels />
 							</Suspense>
 						}
@@ -55,7 +56,7 @@ function App() {
 				<Route
 					path="/login"
 					element={
-						<Suspense fallback={<div className="loading-div">Loading</div>}>
+						<Suspense fallback={<LoadingDiv>Loading</LoadingDiv>}>
 							<Login />
 						</Suspense>
 					}
@@ -63,7 +64,7 @@ function App() {
 				<Route
 					path="/register"
 					element={
-						<Suspense fallback={<div className="loading-div">Loading</div>}>
+						<Suspense fallback={<LoadingDiv>Loading</LoadingDiv>}>
 							<Register />
 						</Suspense>
 					}

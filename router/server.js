@@ -9,7 +9,6 @@ router.get("/channels/:id", async (req, res) => {
 		path: "channels",
 		populate: { path: "messages" },
 	});
-	console.log(server);
 	if (server._id) {
 		res.json(server);
 	}
@@ -78,18 +77,21 @@ async function createServer(serverName, userId) {
 	}
 }
 async function joinServer(serverId, userId) {
-	const server = await Servers.findOneAndUpdate(
-		{ _id: serverId },
-		{
-			$push: {
-				users: userId,
-			},
-		}
-	);
-	await User.findByIdAndUpdate(userId, {
-		$push: { server: server._id },
-	});
-	return server.populate({ path: "channels" });
+	const user = await User.findById(userId).populate("server");
+	if (!user.server.some((serv) => serv._id === serverId)) {
+		const server = await Servers.findOneAndUpdate(
+			{ _id: serverId },
+			{
+				$push: {
+					users: userId,
+				},
+			}
+		);
+		user.server.push(server._id);
+		await user.save();
+		return server.populate({ path: "channels" });
+	}
+	return { join: "failed" };
 }
 
 router.post("/channels/create", async (req, res) => {

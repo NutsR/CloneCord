@@ -2,7 +2,7 @@ import { useState, useContext, useRef, useEffect, Suspense, lazy } from "react";
 import { useUser } from "../../hooks/user";
 import { useSelect } from "../../hooks/channel";
 import { Link } from "react-router-dom";
-
+import { ContextMenu, ServerContainer, ServerIcon } from "./server-styled";
 import { SocketContext } from "../../hooks/socket.io.context";
 import { useServer } from "../../hooks/server";
 import useLongPress from "../../hooks/Longpress";
@@ -70,19 +70,17 @@ function Servers() {
 	}
 	return (
 		<>
-			<div className="contacts-container">
-				<div>
-					<Link to="/channels/@me">
-						<div className="server-icon" data-letters="DS"></div>
-						<hr className="home" />
-					</Link>
-				</div>
+			<ServerContainer>
+				<Link to="/channels/@me">
+					<ServerIcon>Home</ServerIcon>
+					<hr className="home" />
+				</Link>
+
 				{user._id
 					? server.length &&
-					  server.map((s) => (
+					  server.map((s, i) => (
 							<div
-								key={s._id}
-								className="server-display"
+								key={i}
 								onClick={() => {
 									setMenu({});
 									if (serverRef.current) {
@@ -102,13 +100,11 @@ function Servers() {
 								}}
 							>
 								<Link to={`/channels/${s.channels[0]._id}`}>
-									<div
-										onClick={() => handleServerSel(s)}
-										className="server-icon"
-										data-letters={`${s.server_name.charAt(0)} 
-											${s.server_name.indexOf(" ") >= 1 ? s.server_name.split(" ")[1].charAt(0) : ""}
-									`}
-									></div>
+									<ServerIcon onClick={() => handleServerSel(s)}>
+										{s.server_name.indexOf(" ") >= 1
+											? s.server_name.split(" ")[1].charAt(0)
+											: ""}
+									</ServerIcon>
 								</Link>
 							</div>
 					  ))
@@ -116,18 +112,18 @@ function Servers() {
 				<Suspense fallback={<div>Loading</div>}>
 					<JoinServer handleServerSel={handleServerSel} />
 				</Suspense>
-			</div>
+			</ServerContainer>
 
-			<div
+			<ContextMenu
 				ref={serverRef}
-				className={`context-menu ${menu.creator === user._id && "creator"}`}
+				className={`${menu.creator === user._id && "creator"}`}
 			>
 				{menu._id && menu.creator === user._id ? (
 					<div>Creator</div>
 				) : (
 					<div {...longPress}>Leave Server</div>
 				)}
-			</div>
+			</ContextMenu>
 		</>
 	);
 }

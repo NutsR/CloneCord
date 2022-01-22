@@ -29,7 +29,7 @@ const {
 	joinChannel,
 	getDms,
 	joinDm,
-	sendDm,
+	directMessage,
 	sentDm,
 } = require("./controller/socket.io.controller");
 
@@ -109,7 +109,7 @@ io.on("connection", (socket) => {
 	});
 	// received direct message
 	socket.on("sent-dm", (obj) => {
-		sentDm(socket, obj);
+		sentDm(socket, io, obj);
 	});
 	// get direct message history
 	socket.on("get-dms", (user) => {
@@ -120,8 +120,8 @@ io.on("connection", (socket) => {
 		joinDm(socket, dmId);
 	});
 	// send direct message
-	socket.on("send-dm", (messageObj) => {
-		sendDm(socket, messageObj);
+	socket.on("direct-message", (messageObj) => {
+		directMessage(socket, io, messageObj);
 	});
 });
 

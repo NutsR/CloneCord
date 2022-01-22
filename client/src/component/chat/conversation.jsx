@@ -4,6 +4,7 @@ import ProfilePng from "../../dist/user.png";
 import { useUser } from "../../hooks/user";
 import { useSelect } from "../../hooks/channel";
 import { useParams } from "react-router-dom";
+import { DmHeader, DmContainer, ChatMessages, DmInput } from "./chat-styled";
 function Conversations() {
 	const [messages, setMessages] = useState([]);
 	const { id } = useParams();
@@ -36,7 +37,7 @@ function Conversations() {
 		let message = e.currentTarget.inputMsg.value;
 		if (message) {
 			if (user._id) {
-				socket.emit("send-dm", {
+				socket.emit("direct-message", {
 					message,
 					user_id: user._id,
 					username: user.username,
@@ -48,9 +49,9 @@ function Conversations() {
 	};
 	return (
 		<>
-			<div className="dm-header">Direct Messaging</div>
-			<div className="dm-container">
-				<div className="chat-messages">
+			<DmHeader>Direct Messaging</DmHeader>
+			<DmContainer>
+				<ChatMessages>
 					{messages.length
 						? messages.map((element, i) => (
 								<div
@@ -82,11 +83,11 @@ function Conversations() {
 						  ))
 						: null}
 					<div ref={messagesEndRef} className="endRef" />
-				</div>
-				<form className="chat-input" onSubmit={handleSubmit}>
+				</ChatMessages>
+				<DmInput onSubmit={handleSubmit}>
 					<input type="text" name="inputMsg" />
-				</form>
-			</div>
+				</DmInput>
+			</DmContainer>
 		</>
 	);
 }

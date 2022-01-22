@@ -4,6 +4,18 @@ import SelectLogo from "../../dist/downarrow.png";
 import DropDown from "../dropdowns/dropdown-component";
 import { Link, useNavigate } from "react-router-dom";
 import { months, days, years } from "../../utils/item.js";
+import {
+	Container,
+	RegisterCard,
+	Input,
+	Label,
+	MainTitle,
+	ContainerDob,
+	Month,
+	BtnLogin,
+	LinkText,
+	TermService,
+} from "./login-styled";
 function Register({ handleClick }) {
 	const navigate = useNavigate();
 	const { user, checkLogin } = useUser();
@@ -68,55 +80,39 @@ function Register({ handleClick }) {
 		setState({ ...state, day: false });
 	};
 	return (
-		<div className="container">
+		<Container>
 			{!user._id && (
-				<div className="form-card register">
-					<h2 className="main-title">Create an Account</h2>
+				<RegisterCard>
+					<MainTitle>Create an Account</MainTitle>
 					<form onSubmit={handleSubmit}>
-						<div>
-							<label htmlFor="email" className="placeholderText">
-								EMAIL
-							</label>
-							<input
-								type="email"
-								value={userObj.email}
-								name="email"
-								onChange={handleChange}
-								className="input"
-							/>
-						</div>
-						<div>
-							<label htmlFor="username" className="placeholderText">
-								USERNAME
-							</label>
-							<input
-								type="text"
-								value={userObj.username}
-								name="username"
-								onChange={handleChange}
-								className="input"
-							/>
-						</div>
+						<Label>EMAIL</Label>
+						<Input
+							type="email"
+							value={userObj.email}
+							name="email"
+							onChange={handleChange}
+						/>
 
-						<div>
-							<label htmlFor="password" className="placeholderText">
-								PASSWORD
-							</label>
-							<input
-								type="password"
-								value={userObj.password}
-								name="password"
-								onChange={handleChange}
-								className="input"
-							/>
-						</div>
-						<div className="placeholderText">DATE OF BIRTH</div>
-						<div className="container-dob">
-							<div
-								className="select-opt-mm"
-								id="month"
-								onClick={handleDobClick}
-							>
+						<Label htmlFor="username">USERNAME</Label>
+						<Input
+							type="text"
+							value={userObj.username}
+							name="username"
+							onChange={handleChange}
+						/>
+
+						<Label htmlFor="password">PASSWORD</Label>
+						<Input
+							type="password"
+							value={userObj.password}
+							name="password"
+							onChange={handleChange}
+						/>
+
+						<Label>DATE OF BIRTH</Label>
+
+						<ContainerDob>
+							<Month id="month" onClick={handleDobClick}>
 								{!dobstate.month ? (
 									"Select"
 								) : (
@@ -135,7 +131,7 @@ function Register({ handleClick }) {
 										selected={dobstate.month}
 									/>
 								)}
-							</div>
+							</Month>
 							<div className="select-opt-dd" id="day" onClick={handleDobClick}>
 								{!dobstate.day ? (
 									"Select"
@@ -176,25 +172,25 @@ function Register({ handleClick }) {
 									/>
 								)}
 							</div>
-						</div>
-						<button className="btn btn-login">Continue</button>
+						</ContainerDob>
+						<BtnLogin>Continue</BtnLogin>
 						<Link to="/login">
-							<div
-								className="have-an-account link-text"
+							<LinkText
+								className="have-an-account"
 								onClick={handleClick}
 								id="login"
 							>
 								Already have an account?
-							</div>
+							</LinkText>
 						</Link>
-						<div className="terms-service">
+						<TermService>
 							By registering, you agree to{" "}
-							<span className="link-text">Nothing</span>
-						</div>
+							<LinkText style={{ display: "inline" }}>Nothing</LinkText>
+						</TermService>
 					</form>
-				</div>
+				</RegisterCard>
 			)}
-		</div>
+		</Container>
 	);
 }
 

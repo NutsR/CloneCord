@@ -37,7 +37,7 @@ const joinChannel = async (socket, room) => {
 };
 
 //sent-dm socket event
-const sentDm = async (socket, obj) => {
+const sentDm = async (socket, io, obj) => {
 	const message = new Message({
 		user_id: obj.sender,
 		message: obj.message,
@@ -95,8 +95,8 @@ const joinDm = async (socket, dmId) => {
 	socket.emit("dm-history", dm);
 };
 
-//send-dm socket event
-const sendDm = async (socket, messageObj) => {
+// direct-message socket event
+const directMessage = async (socket, io, messageObj) => {
 	if (socket.dm) {
 		const message = new Message({
 			...messageObj,
@@ -118,5 +118,5 @@ module.exports = {
 	sentMessage,
 	getDms,
 	joinDm,
-	sendDm,
+	directMessage,
 };

@@ -3,6 +3,13 @@ import { useUser } from "../../hooks/user";
 import { SocketContext } from "../../hooks/socket.io.context";
 import { useSelect } from "../../hooks/channel";
 import ProfilePng from "../../dist/user.png";
+import {
+	ChatContainer,
+	ChatInput,
+	ChatMessages,
+	Header,
+	NoMessages,
+} from "./chat-styled";
 function Chat() {
 	const socket = useContext(SocketContext);
 	const { user } = useUser();
@@ -49,9 +56,9 @@ function Chat() {
 	}, [messages]);
 	return (
 		<>
-			<div className="header">#{selected.name}</div>
-			<div className="chat-container">
-				<div className="chat-messages">
+			<Header>#{selected.name}</Header>
+			<ChatContainer>
+				<ChatMessages>
 					{messages.length ? (
 						messages.map((element, i) => (
 							<div
@@ -83,16 +90,14 @@ function Chat() {
 							</div>
 						))
 					) : (
-						<div className="no-message">
-							Create history! Send the first message
-						</div>
+						<NoMessages>Create history! Send the first message</NoMessages>
 					)}
 					<div ref={messagesEndRef} className="endRef" />
-				</div>
-				<form className="chat-input" onSubmit={handleSubmit}>
+				</ChatMessages>
+				<ChatInput onSubmit={handleSubmit}>
 					<input type="text" name="inputMsg" />
-				</form>
-			</div>
+				</ChatInput>
+			</ChatContainer>
 		</>
 	);
 }

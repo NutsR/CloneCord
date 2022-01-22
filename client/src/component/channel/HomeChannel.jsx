@@ -3,6 +3,14 @@ import { useContext, useState, useEffect } from "react";
 import { useUser } from "../../hooks/user";
 import ProfilePng from "../../dist/user.png";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import {
+	ChatEmpty,
+	ContactTitle,
+	DirectMessages,
+	DmLists,
+	DmUsers,
+	ProfilePic,
+} from "./channel-styled";
 function HomeChannel() {
 	const [contacts, setContacts] = useState([]);
 	const [selected, setSelected] = useState("");
@@ -26,44 +34,42 @@ function HomeChannel() {
 	}, [socket]);
 	return (
 		<>
-			<div className="dms">
-				<div className="contact-title">Direct Message</div>
+			<DirectMessages>
+				<ContactTitle>Direct Message</ContactTitle>
 				<div>
 					{contacts.length ? (
 						contacts.map((dm, i) => {
 							return (
-								<div key={i} className="dm-lists">
+								<DmLists key={i}>
 									{dm.users.map((userObj, i) => {
 										if (userObj._id !== user._id) {
 											return (
-												<div
+												<DmUsers
 													key={i + 500}
 													onClick={() => handleJoin(dm, userObj)}
-													className={`dm-users ${
-														selected === dm._id ? "dm-selected" : ""
-													}`}
+													className={selected === dm._id ? "dm-selected" : ""}
 												>
-													<div className="profile-pic">
+													<ProfilePic>
 														<img src={ProfilePng} alt="profile" />
-													</div>
+													</ProfilePic>
 													<div className="dm-username">{userObj.username}</div>
-												</div>
+												</DmUsers>
 											);
 										}
 										return null;
 									})}
-								</div>
+								</DmLists>
 							);
 						})
 					) : (
 						<div>You have no contacts</div>
 					)}
 				</div>
-			</div>
+			</DirectMessages>
 			{location.pathname === "/channels/@me" ? (
-				<div className="chat-empty">
+				<ChatEmpty>
 					<span>Select a user to chat or Create/Join a server</span>
-				</div>
+				</ChatEmpty>
 			) : (
 				<Outlet />
 			)}

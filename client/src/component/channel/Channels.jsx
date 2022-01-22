@@ -7,6 +7,21 @@ import { useServer } from "../../hooks/server";
 import ProfileDropdown from "../dropdowns/profile";
 import { useUser } from "../../hooks/user";
 import useLongPress from "../../hooks/Longpress";
+import {
+	ChannelContainer,
+	ChannelTitle,
+	ServerInfo,
+	ServerDetailed,
+	ServerId,
+	ContextMenu,
+	ChannelSubtitle,
+	CategoryName,
+	ChannelLink,
+	Hashtag,
+	ServerUsers,
+	User,
+	Online,
+} from "./channel-styled";
 const CreateChannelModal = lazy(() => import("./channelModal"));
 function Channels() {
 	const { id } = useParams();
@@ -133,12 +148,11 @@ function Channels() {
 
 	return (
 		<>
-			<div className="channels-container">
-				<div className="channel-title">
+			<ChannelContainer>
+				<ChannelTitle>
 					{channel.length && (
 						<div>
-							<div
-								className="server-info"
+							<ServerInfo
 								onClick={(e) => {
 									setServMenu(!servMenu);
 									if (serverRef.current) {
@@ -148,20 +162,22 @@ function Channels() {
 								}}
 							>
 								&#8942;
-							</div>
+							</ServerInfo>
 
 							<div>{channel[0].server_name}</div>
 							<div>id: {channel[0]._id}</div>
 						</div>
 					)}
 					{servMenu && user._id === channel[0].creator ? (
-						<div ref={serverRef} className="context-menu serv-info">
+						<ServerDetailed ref={serverRef}>
 							<div {...serverDelete}>Delete Server (hold)</div>
-						</div>
+						</ServerDetailed>
+					) : servMenu ? (
+						<ServerId ref={serverRef}>{channel[0]._id} Invite ID</ServerId>
 					) : null}
-				</div>
-				<div className="channel-subtitle">
-					<span className="category-name"> {" >"}Text Channels</span>{" "}
+				</ChannelTitle>
+				<ChannelSubtitle>
+					<CategoryName> {" >"} Text Channels</CategoryName>{" "}
 					<Suspense fallback={<div>Loading</div>}>
 						<CreateChannelModal
 							server_id={channel.length && channel[0]._id}
@@ -169,7 +185,7 @@ function Channels() {
 							setChannel={setChannel}
 						/>
 					</Suspense>
-				</div>
+				</ChannelSubtitle>
 
 				{channel
 					? channel.length && (
@@ -189,40 +205,36 @@ function Channels() {
 												setMenu({ id: chan._id });
 											}
 										}}
-										className="transi-in"
 									>
 										<Link to={`/channels/${chan._id}`}>
-											<span
-												className={`channel-link ${
+											<ChannelLink
+												className={`${
 													selected._id === chan._id ? "channel-selected" : ""
 												}`}
 											>
-												<span className="hashtag">#</span>
+												<Hashtag>#</Hashtag>
 												{chan.name}
-											</span>
+											</ChannelLink>
 										</Link>
 									</div>
 								))}
-								<div ref={channelsRef} className="context-menu">
+								<ContextMenu ref={channelsRef}>
 									{menu.id && (
 										<div {...channelDelete}>Delete Channel (Hold)</div>
 									)}
-								</div>
+								</ContextMenu>
 							</>
 					  )
 					: null}
-			</div>
+			</ChannelContainer>
 			{selected._id && <Chat />}
-			<div className="server-users">
-				<div className="online">
-					Users- {channel.length && channel[0].users.length}
-				</div>
+			<ServerUsers>
+				<Online>Users- {channel.length && channel[0].users.length}</Online>
 				<div>
 					{channel.length &&
-						channel[0].users.map((userObj) => (
-							<div key={userObj._id}>
-								<div
-									className="user"
+						channel[0].users.map((userObj, i) => (
+							<div key={i}>
+								<User
 									onClick={() =>
 										showProfile((u) => (u._id === userObj._id ? {} : userObj))
 									}
@@ -233,14 +245,14 @@ function Channels() {
 									) : (
 										""
 									)}
-								</div>
+								</User>
 							</div>
 						))}
 					{profile._id && (
 						<ProfileDropdown userObj={profile} showProfile={showProfile} />
 					)}
 				</div>
-			</div>
+			</ServerUsers>
 		</>
 	);
 }

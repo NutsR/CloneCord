@@ -6,6 +6,7 @@ function JoinServer({ handleServerSel }) {
 	const { user } = useUser();
 	const { setServer } = useServer();
 	const [modalIsOpen, setIsOpen] = useState(false);
+	const [error, setError] = useState({});
 	Modal.setAppElement(document.getElementById("opener"));
 	const handleJoin = async (e) => {
 		e.preventDefault();
@@ -24,8 +25,11 @@ function JoinServer({ handleServerSel }) {
 		if (data.server._id) {
 			handleServerSel(data.server);
 			setServer((u) => u.push(data.server));
-			setIsOpen(false);
+			return setIsOpen(false);
 		}
+
+		console.log("drue");
+		setError({ message: "Error! Already in the specified channel" });
 	};
 	const handleCreate = async (e) => {
 		e.preventDefault();
@@ -96,6 +100,7 @@ function JoinServer({ handleServerSel }) {
 					</div>
 					<button className="modal-btn">Join A server</button>
 				</form>
+				{error.message && <div className="error-msg">{error.message}</div>}
 			</Modal>
 		</>
 	);

@@ -20,17 +20,11 @@ function Main() {
 		}
 	}, [loader, user._id, navigate]);
 	return (
-		<>
-			{loader ? (
-				<div className="loading-div">Loading</div>
-			) : (
-				<div className="main-container">
-					<Servers />
-					<Outlet />
-					<Logout />
-				</div>
-			)}
-		</>
+		<div className="main-container">
+			<Servers />
+			<Outlet />
+			<Logout />
+		</div>
 	);
 }
 
