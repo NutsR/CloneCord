@@ -14,6 +14,7 @@ const ServerContainer = styled.div`
 	overflow-y: scroll;
 	align-items: flex-end;
 	scrollbar-width: none;
+	z-index: 100000;
 	-ms-overflow-style: none;
 	&::-webkit-scrollbar {
 		display: none;

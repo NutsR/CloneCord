@@ -10,6 +10,11 @@ const ChannelContainer = styled.div`
 		color: #ffffff !important;
 		text-decoration: none !important;
 	}
+	@media (max-width: 800px) {
+		position: fixed;
+		left: 0;
+		transform: translateX(-100vw);
+	}
 `;
 const ChannelTitle = styled.div`
 	padding: 15px 32px;
@@ -114,6 +119,9 @@ const ServerUsers = styled.div`
 	background-color: #2f3136;
 	width: 16%;
 	color: #ffffff;
+	@media (max-width: 800px) {
+		transform: translateX(100vw);
+	}
 `;
 const User = styled.div`
 	font-size: 16px;

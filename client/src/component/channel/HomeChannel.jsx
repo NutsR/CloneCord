@@ -3,6 +3,7 @@ import { useContext, useState, useEffect } from "react";
 import { useUser } from "../../hooks/user";
 import ProfilePng from "../../dist/user.png";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import Logout from "../Login-register/logout";
 import {
 	ChatEmpty,
 	ContactTitle,
@@ -65,6 +66,7 @@ function HomeChannel() {
 						<div>You have no contacts</div>
 					)}
 				</div>
+				<Logout />
 			</DirectMessages>
 			{location.pathname === "/channels/@me" ? (
 				<ChatEmpty>

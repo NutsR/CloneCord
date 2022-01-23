@@ -20,6 +20,9 @@ const LoginCard = styled(FormCard)`
 
 const RegisterCard = styled(FormCard)`
 	margin-top: 50px;
+	@media (max-width: 800px) {
+		margin-top: 25px;
+	}
 `;
 
 const MainTitle = styled.h2`
@@ -45,6 +48,9 @@ const Input = styled.input`
 	&:focus {
 		outline: none;
 		border: 1px solid #00aff4;
+	}
+	@media (max-width: 800px) {
+		width: 90% !important;
 	}
 `;
 

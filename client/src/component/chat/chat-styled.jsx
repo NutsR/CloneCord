@@ -12,6 +12,10 @@ const Header = styled.div`
 	border-bottom: 3px solid #2b2e33;
 	top: 0;
 	vertical-align: bottom;
+	@media (max-width: 800px) {
+		width: 94%;
+		left: 6%;
+	}
 `;
 
 const DmHeader = styled(Header)`
@@ -27,6 +31,10 @@ const ChatContainer = styled.div`
 	margin-right: 20%;
 	margin-left: 23%;
 	min-height: 0;
+	@media (max-width: 800px) {
+		min-width: 94%;
+		margin-left: 6%;
+	}
 `;
 const DmContainer = styled(ChatContainer)`
 	margin-right: unset;
@@ -65,6 +73,10 @@ const ChatInput = styled.form`
 	& > input:focus {
 		outline: none;
 	}
+	@media (max-width: 800px) {
+		height: 4vh;
+		width: 90%;
+	}
 `;
 const DmInput = styled(ChatInput)`
 	width: 77%;
@@ -76,6 +88,7 @@ const NoMessages = styled.div`
 	margin-top: 50%;
 	font-weight: 600;
 `;
+
 export {
 	DmHeader,
 	DmContainer,

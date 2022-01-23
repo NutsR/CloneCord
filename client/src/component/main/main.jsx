@@ -4,7 +4,6 @@ import { useUser } from "../../hooks/user";
 import Servers from "../server/servers";
 import { SocketContext } from "../../hooks/socket.io.context";
 import "../../styles/styles.css";
-import Logout from "../Login-register/logout";
 
 function Main() {
 	const socket = useContext(SocketContext);
@@ -23,7 +22,6 @@ function Main() {
 		<div className="main-container">
 			<Servers />
 			<Outlet />
-			<Logout />
 		</div>
 	);
 }

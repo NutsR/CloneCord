@@ -7,6 +7,8 @@ import { useServer } from "../../hooks/server";
 import ProfileDropdown from "../dropdowns/profile";
 import { useUser } from "../../hooks/user";
 import useLongPress from "../../hooks/Longpress";
+import Logout from "../Login-register/logout";
+import useWindowDimensions from "../../hooks/windowSize";
 import {
 	ChannelContainer,
 	ChannelTitle,
@@ -33,7 +35,7 @@ function Channels() {
 	const [menu, setMenu] = useState({});
 	const [servMenu, setServMenu] = useState(false);
 	const [profile, showProfile] = useState({});
-
+	const { width } = useWindowDimensions();
 	const channelsRef = useRef();
 	const serverRef = useRef();
 
@@ -226,7 +228,9 @@ function Channels() {
 							</>
 					  )
 					: null}
+				<Logout />
 			</ChannelContainer>
+
 			{selected._id && <Chat />}
 			<ServerUsers>
 				<Online>Users- {channel.length && channel[0].users.length}</Online>

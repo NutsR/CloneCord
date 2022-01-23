@@ -1,17 +1,13 @@
 import { useState } from "react";
 import { useUser } from "../../hooks/user";
-import SelectLogo from "../../dist/downarrow.png";
-import DropDown from "../dropdowns/dropdown-component";
 import { Link, useNavigate } from "react-router-dom";
-import { months, days, years } from "../../utils/item.js";
+
 import {
 	Container,
 	RegisterCard,
 	Input,
 	Label,
 	MainTitle,
-	ContainerDob,
-	Month,
 	BtnLogin,
 	LinkText,
 	TermService,
@@ -46,39 +42,6 @@ function Register({ handleClick }) {
 
 		checkLogin();
 	};
-	const [state, setState] = useState({
-		month: false,
-		year: false,
-		day: false,
-	});
-	const [dobstate, setDobState] = useState({ month: "", day: 0, year: 0 });
-	const handleDobClick = (e) => {
-		switch (e.target.id) {
-			case "month":
-				setState({ month: !state.month, day: false, year: false });
-				break;
-			case "year":
-				setState({ month: false, day: false, year: !state.year });
-				break;
-			case "day":
-				setState({ month: false, day: !state.day, year: false });
-				break;
-			default:
-				setState({ month: false, day: false, year: false });
-				break;
-		}
-	};
-	const handleDobChange = (e, id) => {
-		if (id === "months") {
-			setDobState({ ...dobstate, month: e.target.id });
-			return setState({ ...state, month: false });
-		} else if (id === "years") {
-			setDobState({ ...dobstate, year: e.target.id });
-			return setState({ ...state, year: false });
-		}
-		setDobState({ ...dobstate, day: e.target.id });
-		setState({ ...state, day: false });
-	};
 	return (
 		<Container>
 			{!user._id && (
@@ -111,68 +74,6 @@ function Register({ handleClick }) {
 
 						<Label>DATE OF BIRTH</Label>
 
-						<ContainerDob>
-							<Month id="month" onClick={handleDobClick}>
-								{!dobstate.month ? (
-									"Select"
-								) : (
-									<span className="selected">{dobstate.month}</span>
-								)}
-								<div className="select-arrow" id="month">
-									<img src={SelectLogo} alt="select" id="month" />
-								</div>
-								{state.month && (
-									<DropDown
-										valueArray={months}
-										divClass={"dropdown-mm"}
-										divId={"months"}
-										handleClose={setState}
-										handleClick={handleDobChange}
-										selected={dobstate.month}
-									/>
-								)}
-							</Month>
-							<div className="select-opt-dd" id="day" onClick={handleDobClick}>
-								{!dobstate.day ? (
-									"Select"
-								) : (
-									<span className="selected">{dobstate.day}</span>
-								)}
-								<div className="select-arrow" id="day">
-									<img src={SelectLogo} alt="select" id="day" />
-								</div>
-								{state.day && (
-									<DropDown
-										valueArray={days}
-										divClass={"dropdown-dd"}
-										divId={"days"}
-										handleClose={setState}
-										selected={dobstate.day}
-										handleClick={handleDobChange}
-									/>
-								)}
-							</div>
-							<div className="select-opt-yy" id="year" onClick={handleDobClick}>
-								{!dobstate.year ? (
-									"Select"
-								) : (
-									<span className="selected">{dobstate.year}</span>
-								)}
-								<div className="select-arrow" id="year">
-									<img src={SelectLogo} alt="select" id="year" />
-								</div>
-								{state.year && (
-									<DropDown
-										valueArray={years}
-										divClass={"dropdown-yy"}
-										divId={"years"}
-										selected={dobstate.year}
-										handleClose={setState}
-										handleClick={handleDobChange}
-									/>
-								)}
-							</div>
-						</ContainerDob>
 						<BtnLogin>Continue</BtnLogin>
 						<Link to="/login">
 							<LinkText
