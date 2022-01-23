@@ -70,7 +70,7 @@ function Servers() {
 	}
 	return (
 		<>
-			<ServerContainer>
+			<ServerContainer id="server">
 				<Link to="/channels/@me">
 					<ServerIcon>Home</ServerIcon>
 					<hr className="home" />

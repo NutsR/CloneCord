@@ -3,6 +3,9 @@ import { useUser } from "../../hooks/user";
 import { SocketContext } from "../../hooks/socket.io.context";
 import { useSelect } from "../../hooks/channel";
 import ProfilePng from "../../dist/user.png";
+import useWindowDimensions from "../../hooks/windowSize";
+import handleMenuShow, { handleUserShow } from "../../hooks/mobile";
+import { CloseMenu, Trigram } from "../../App-styled";
 import {
 	ChatContainer,
 	ChatInput,
@@ -13,12 +16,15 @@ import {
 function Chat() {
 	const socket = useContext(SocketContext);
 	const { user } = useUser();
+	const [show, setShow] = useState(false);
 	const messagesEndRef = useRef(null);
+	const [showUsers, setShowUsers] = useState(false);
 	const scrollToBottom = () => {
 		messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
 	};
 	const [messages, setMessages] = useState([]);
 	const { selected } = useSelect();
+	const { width } = useWindowDimensions();
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		let message = e.currentTarget.inputMsg.value;
@@ -34,6 +40,7 @@ function Chat() {
 			}
 		}
 	};
+
 	useEffect(() => {
 		socket.on("history", (historyMsg) => {
 			const msgs = historyMsg.map((el) => {
@@ -52,11 +59,50 @@ function Chat() {
 		return () => {
 			socket.off("receive-message");
 			socket.off("history");
+			setShow(false);
+			if (width < 800) {
+				document.getElementById("server").style.transform = "translateX(-100%)";
+				const channel = document.getElementById("channel");
+				if (channel) {
+					channel.style.transform = "translateX(-100vw)";
+				}
+			}
 		};
 	}, [messages]);
 	return (
 		<>
-			<Header>#{selected.name}</Header>
+			{show || (showUsers && width < 800) ? (
+				<CloseMenu
+					onClick={() => {
+						if (show) {
+							return handleMenuShow(show, setShow, "channel");
+						}
+						if (showUsers) {
+							return handleUserShow(showUsers, setShowUsers);
+						}
+					}}
+				>
+					X
+				</CloseMenu>
+			) : (
+				""
+			)}
+			<Header>
+				{width < 800 && (
+					<Trigram onClick={() => handleMenuShow(show, setShow, "channel")}>
+						☰
+					</Trigram>
+				)}
+				#{selected.name}
+				{width < 800 && (
+					<Trigram
+						className="trigram-right"
+						onClick={() => handleUserShow(showUsers, setShowUsers)}
+					>
+						☰
+					</Trigram>
+				)}
+			</Header>
 			<ChatContainer>
 				<ChatMessages>
 					{messages.length ? (

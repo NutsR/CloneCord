@@ -13,13 +13,17 @@ const Header = styled.div`
 	top: 0;
 	vertical-align: bottom;
 	@media (max-width: 800px) {
-		width: 94%;
-		left: 6%;
+		width: 100%;
+		left: 0%;
 	}
 `;
 
 const DmHeader = styled(Header)`
 	width: 77%;
+	@media (max-width: 800px) {
+		width: 100%;
+		z-index: 1;
+	}
 `;
 const ChatContainer = styled.div`
 	display: flex;
@@ -32,20 +36,34 @@ const ChatContainer = styled.div`
 	margin-left: 23%;
 	min-height: 0;
 	@media (max-width: 800px) {
-		min-width: 94%;
-		margin-left: 6%;
+		min-width: 100%;
+		margin-left: 0%;
 	}
 `;
 const DmContainer = styled(ChatContainer)`
 	margin-right: unset;
+	margin-left: 23%;
 	min-width: 77%;
+	width: 100%;
+	@media (max-width: 800px) {
+		margin-left: 0%;
+		margin-right: 0;
+		position: absolute;
+		min-width: 100%;
+	}
 `;
 const ChatMessages = styled.div`
 	display: flex;
 	flex-direction: column;
 	overflow-y: scroll;
+	margin-top: 10px;
 	scrollbar-color: #202225 #2f3136;
 	height: 90vh;
+	@media (max-width: 800px) {
+		height: 87vh;
+		margin-right: 10px;
+		margin-bottom: 20px;
+	}
 `;
 const ChatInput = styled.form`
 	position: fixed;
@@ -74,12 +92,18 @@ const ChatInput = styled.form`
 		outline: none;
 	}
 	@media (max-width: 800px) {
-		height: 4vh;
-		width: 90%;
+		height: 6vh;
+		width: 99%;
+		bottom: 0;
 	}
 `;
 const DmInput = styled(ChatInput)`
 	width: 77%;
+
+	@media (max-width: 800px) {
+		width: 100%;
+		height: 10vh;
+	}
 `;
 const NoMessages = styled.div`
 	font-size: 25px;

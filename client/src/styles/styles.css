@@ -32,20 +32,18 @@
 .messages {
 	margin-left: 20px;
 	overflow-wrap: break-word;
-	margin-bottom: 10px;
 }
 .message-container .messages:first-child {
 	margin-top: auto;
 }
 .message-container .messages:last-child .msg {
-	margin-top: 5px;
-	margin-bottom: unset;
-	height: 7px;
+	position: relative;
 }
+
 .continue .messages .msg {
 	margin-top: unset;
 	margin-left: 55px;
-	height: 7px;
+	position: relative;
 }
 
 .continue .profile-pic,
@@ -65,7 +63,7 @@
 }
 
 .endRef {
-	margin-bottom: 9%;
+	margin-bottom: 4%;
 }
 .category-add .tooltiptext {
 	visibility: hidden;
@@ -80,6 +78,7 @@
 	/* Position the tooltip */
 	position: absolute;
 	z-index: 1;
+	left: 50%;
 }
 .category-add:hover .tooltiptext {
 	visibility: visible;
@@ -284,4 +283,32 @@
 	background-color: #dc3545;
 	color: #ffffff;
 	font-weight: 600;
+}
+@media screen and (max-width: 800px) {
+	.message-container {
+		margin-bottom: 10px;
+	}
+	.continue {
+		margin-top: unset;
+	}
+	.logout {
+		width: 97%;
+	}
+	.server-modal {
+		width: 75%;
+		left: 5%;
+	}
+	.channel-modal {
+		width: 75%;
+		left: 4.5%;
+	}
+	.trigram-right {
+		margin-left: auto;
+	}
+	.profile-dropdown {
+		width: 60vw;
+		right: 40vw;
+		height: 20vh;
+		padding: 16px;
+	}
 }

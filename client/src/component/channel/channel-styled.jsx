@@ -13,7 +13,10 @@ const ChannelContainer = styled.div`
 	@media (max-width: 800px) {
 		position: fixed;
 		left: 0;
+		margin-left: 20%;
+		width: 80%;
 		transform: translateX(-100vw);
+		transition: transform 300ms ease-out;
 	}
 `;
 const ChannelTitle = styled.div`
@@ -121,6 +124,8 @@ const ServerUsers = styled.div`
 	color: #ffffff;
 	@media (max-width: 800px) {
 		transform: translateX(100vw);
+		width: 50%;
+		transition: transform 300ms ease-out;
 	}
 `;
 const User = styled.div`
@@ -159,6 +164,14 @@ const DirectMessages = styled.div`
 	height: 100%;
 	color: #ffffff;
 	width: 17%;
+	@media (max-width: 800px) {
+		transform: translateX(-100vw);
+		position: absolute;
+		height: 100%;
+		width: 80%;
+		margin-left: 20%;
+		transition: transform 300ms linear;
+	}
 `;
 const DmLists = styled.div`
 	padding: 5px 5px;
@@ -192,6 +205,12 @@ const ChatEmpty = styled.div`
 	color: #dcddde;
 	margin-left: 23%;
 	min-height: 0;
+	@media (max-width: 800px) {
+		position: absolute;
+		height: 100%;
+		margin-left: 0%;
+		width: 100%;
+	}
 `;
 export {
 	ChannelContainer,

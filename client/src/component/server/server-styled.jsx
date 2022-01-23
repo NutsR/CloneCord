@@ -19,6 +19,12 @@ const ServerContainer = styled.div`
 	&::-webkit-scrollbar {
 		display: none;
 	}
+	@media (max-width: 800px) {
+		transform: translateX(-100%);
+		transition: transform 200ms ease-in;
+
+		width: 20%;
+	}
 `;
 const ServerIcon = styled.div`
 	text-transform: capitalize;

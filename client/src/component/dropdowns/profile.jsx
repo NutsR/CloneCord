@@ -2,6 +2,7 @@ import { useContext, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { SocketContext } from "../../hooks/socket.io.context";
 import { useUser } from "../../hooks/user";
+import { Input } from "../Login-register/login-styled";
 function ProfileDropdown({ userObj, showProfile }) {
 	const socket = useContext(SocketContext);
 	const navigate = useNavigate();
@@ -45,7 +46,7 @@ function ProfileDropdown({ userObj, showProfile }) {
 			<div className="username">{userObj.username}</div>
 			{user._id === userObj._id ? null : (
 				<form onSubmit={handleSubmit}>
-					<input
+					<Input
 						type="text"
 						placeholder={`message user`}
 						className="input"

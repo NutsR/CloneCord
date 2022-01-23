@@ -76,6 +76,8 @@ function Channels() {
 			if (getCorrectServer.length) {
 				setChannel(getCorrectServer);
 			}
+		} else {
+			navigate("/channels/@me");
 		}
 		document.addEventListener("mousedown", closeMenu);
 		return () => {
@@ -150,7 +152,7 @@ function Channels() {
 
 	return (
 		<>
-			<ChannelContainer>
+			<ChannelContainer id="channel">
 				<ChannelTitle>
 					{channel.length && (
 						<div>
@@ -232,7 +234,7 @@ function Channels() {
 			</ChannelContainer>
 
 			{selected._id && <Chat />}
-			<ServerUsers>
+			<ServerUsers id="users">
 				<Online>Users- {channel.length && channel[0].users.length}</Online>
 				<div>
 					{channel.length &&
