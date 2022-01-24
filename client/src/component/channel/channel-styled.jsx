@@ -166,8 +166,7 @@ const DirectMessages = styled.div`
 	width: 17%;
 	@media (max-width: 800px) {
 		transform: translateX(-100vw);
-		position: absolute;
-		height: 100%;
+		position: fixed;
 		width: 80%;
 		margin-left: 20%;
 		transition: transform 300ms linear;
