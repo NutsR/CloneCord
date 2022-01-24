@@ -5,10 +5,12 @@ const Channel = require("../models/channel");
 const User = require("../models/user");
 router.get("/channels/:id", async (req, res) => {
 	const { id } = req.params;
-	const server = Servers.findById(id).populate({
-		path: "channels",
-		populate: { path: "messages" },
-	});
+	const server = Servers.findById(id)
+		.lean()
+		.populate({
+			path: "channels",
+			populate: { path: "messages" },
+		});
 	if (server._id) {
 		res.json(server);
 	}

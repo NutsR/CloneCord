@@ -28,7 +28,9 @@ const joinChannel = async (socket, room) => {
 	socket.join(room);
 	socket.room = room;
 	try {
-		const channel = await Channel.findById(room).populate("messages");
+		const channel = await Channel.findById(room)
+			.lean()
+			.populate({ path: "messages" });
 
 		socket.emit("history", channel.messages);
 	} catch (err) {
@@ -81,13 +83,16 @@ const getDms = async (socket, user) => {
 	const dms = await DirectMessage.find({
 		//prettier-ignore
 		"users": mongoose.Types.ObjectId(user),
-	}).populate("users");
+	})
+		.lean()
+		.populate("users");
 	socket.emit("dms-list", dms);
 };
 
 //join-dm socket event
 const joinDm = async (socket, dmId) => {
 	const dm = await DirectMessage.findById(dmId)
+		.lean()
 		.populate("users")
 		.populate("messages");
 	socket.dm = dmId;
