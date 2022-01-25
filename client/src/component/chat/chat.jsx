@@ -43,6 +43,7 @@ function Chat() {
 
 	useEffect(() => {
 		socket.on("history", (historyMsg) => {
+			console.log(historyMsg);
 			const msgs = historyMsg.map((el) => {
 				el.time = new Date(el.time);
 				el.date = new Date(el.date);
@@ -51,6 +52,7 @@ function Chat() {
 			setMessages(msgs);
 		});
 		socket.on("receive-message", (message) => {
+			console.log(message);
 			message.time = new Date(message.time);
 			setMessages((msg) => [...msg, message]);
 		});

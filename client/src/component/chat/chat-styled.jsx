@@ -58,7 +58,7 @@ const ChatMessages = styled.div`
 	overflow-y: scroll;
 	margin-top: 10px;
 	scrollbar-color: #202225 #2f3136;
-	height: 90vh;
+	height: 87vh;
 	margin-bottom: 20px;
 	@media (max-width: 800px) {
 		height: 87vh;
