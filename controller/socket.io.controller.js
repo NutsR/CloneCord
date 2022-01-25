@@ -11,10 +11,12 @@ const sentMessage = async (socket, io, data) => {
 			...data,
 			time: new Date(),
 		});
-		channel.messages.push([message._id]);
-		await message.save();
+		channel.messages.push(message._id);
+		message.save((err, data) => {
+			console.log(data);
+			io.to(socket.room).emit("receive-message", message);
+		});
 		await channel.save();
-		io.to(socket.room).emit("receive-message", message);
 		return;
 	}
 };
@@ -28,11 +30,10 @@ const joinChannel = async (socket, room) => {
 	socket.join(room);
 	socket.room = room;
 	try {
-		const channel = await Channel.findById(room)
-			.lean()
-			.populate({ path: "messages" });
-
-		socket.emit("history", channel.messages);
+		const history = await Channel.findById(room).lean().populate("message");
+		if (history) {
+			socket.emit("history", history.message);
+		}
 	} catch (err) {
 		console.log(err);
 	}
@@ -91,13 +92,10 @@ const getDms = async (socket, user) => {
 
 //join-dm socket event
 const joinDm = async (socket, dmId) => {
-	const dm = await DirectMessage.findById(dmId)
-		.lean()
-		.populate("users")
-		.populate("messages");
+	const dm = await DirectMessage.findById(dmId).lean().populate("message");
 	socket.dm = dmId;
 	socket.join(dmId);
-	socket.emit("dm-history", dm);
+	socket.emit("dm-history", dm.message);
 };
 
 // direct-message socket event

@@ -45,7 +45,7 @@ function ProfileDropdown({ userObj, showProfile }) {
 			</div>
 			<div className="username">{userObj.username}</div>
 			{user._id === userObj._id ? null : (
-				<form onSubmit={handleSubmit}>
+				<form onSubmit={handleSubmit} autoComplete="off">
 					<Input
 						type="text"
 						placeholder={`message user`}

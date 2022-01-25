@@ -140,7 +140,7 @@ function Chat() {
 					)}
 					<div ref={messagesEndRef} className="endRef" />
 				</ChatMessages>
-				<ChatInput onSubmit={handleSubmit}>
+				<ChatInput onSubmit={handleSubmit} autoComplete="off">
 					<input type="text" name="inputMsg" />
 				</ChatInput>
 			</ChatContainer>

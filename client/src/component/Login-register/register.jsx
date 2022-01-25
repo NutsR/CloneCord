@@ -47,7 +47,7 @@ function Register({ handleClick }) {
 			{!user._id && (
 				<RegisterCard>
 					<MainTitle>Create an Account</MainTitle>
-					<form onSubmit={handleSubmit}>
+					<form onSubmit={handleSubmit} autoComplete="off">
 						<Label>EMAIL</Label>
 						<Input
 							type="email"

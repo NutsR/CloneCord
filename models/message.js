@@ -1,7 +1,11 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-
+const { nanoid } = require("nanoid");
 const messageSchema = new Schema({
+	_id: {
+		type: String,
+		default: () => nanoid(),
+	},
 	message: {
 		type: String,
 		required: true,

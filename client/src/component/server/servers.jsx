@@ -103,7 +103,7 @@ function Servers() {
 									<ServerIcon onClick={() => handleServerSel(s)}>
 										{s.server_name.indexOf(" ") >= 1
 											? s.server_name.split(" ")[1].charAt(0)
-											: ""}
+											: s.server_name.charAt(0)}
 									</ServerIcon>
 								</Link>
 							</div>

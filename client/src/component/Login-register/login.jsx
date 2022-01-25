@@ -46,7 +46,7 @@ function Login() {
 			{!user._id && (
 				<LoginCard>
 					<MainTitle>Welcome back to CloneCord</MainTitle>
-					<form onSubmit={handleSubmit}>
+					<form onSubmit={handleSubmit} autoComplete="off">
 						<FormItem>
 							<Label htmlFor="username">USERNAME</Label>
 							<Input

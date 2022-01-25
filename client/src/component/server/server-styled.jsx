@@ -55,7 +55,7 @@ const ContextMenu = styled.div`
 	background-size: 200%;
 	transition: 1s ease-out;
 	cursor: pointer;
-	z-index: 10000;
+	z-index: 100003;
 	&:active {
 		background-position: left;
 		transition: 2s ease-out;

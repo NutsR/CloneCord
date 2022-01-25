@@ -44,7 +44,7 @@ function CreateChannelModal({ server_id, setChannel }) {
 				<button className="close-modal" onClick={closeModal}>
 					X
 				</button>
-				<form onSubmit={handleSubmit}>
+				<form onSubmit={handleSubmit} autoComplete="off">
 					<div className="modal-title">Create a Text Channel</div>
 					<div className="create-div">
 						<label htmlFor="channel_name">Create a channel</label>

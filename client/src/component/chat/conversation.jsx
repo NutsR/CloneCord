@@ -16,7 +16,7 @@ function Conversations() {
 	};
 	useEffect(() => {
 		socket.on("dm-history", (history) => {
-			const updateMsgs = history.messages.map((msg) => {
+			const updateMsgs = history.map((msg) => {
 				msg.time = new Date(msg.time);
 				return msg;
 			});
@@ -84,7 +84,7 @@ function Conversations() {
 						: null}
 					<div ref={messagesEndRef} className="endRef" />
 				</ChatMessages>
-				<DmInput onSubmit={handleSubmit}>
+				<DmInput onSubmit={handleSubmit} autoComplete="off">
 					<input type="text" name="inputMsg" />
 				</DmInput>
 			</DmContainer>

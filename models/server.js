@@ -13,9 +13,8 @@ const serverSchema = new Schema({
 		type: Schema.Types.ObjectId,
 		ref: "User",
 	},
-	channels: [{ type: Schema.Types.ObjectId, ref: "Channel" }],
+	channels: [{ type: String, ref: "Channel" }],
 	users: [{ type: Schema.Types.ObjectId, ref: "User" }],
-	invite: String,
 });
 serverSchema.post("findOneAndDelete", (server) => {
 	server.users.forEach(async (user) => {

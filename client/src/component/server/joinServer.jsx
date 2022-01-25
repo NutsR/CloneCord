@@ -80,7 +80,11 @@ function JoinServer({ handleServerSel }) {
 					start talking
 				</div>
 
-				<form onSubmit={handleCreate} className="create-server">
+				<form
+					onSubmit={handleCreate}
+					className="create-server"
+					autoComplete="off"
+				>
 					<div className="create-div">
 						<label htmlFor="serverName">Server name</label>
 					</div>
@@ -89,7 +93,7 @@ function JoinServer({ handleServerSel }) {
 					</div>
 					<button className="modal-btn">Create a server</button>
 				</form>
-				<form onSubmit={handleJoin} className="join-server">
+				<form onSubmit={handleJoin} className="join-server" autoComplete="off">
 					<div className="join-div">
 						<label className="join-server-label" htmlFor="server_id">
 							Server ID
