@@ -14,7 +14,8 @@ const cors = require("cors");
 // server
 const app = express();
 const server = http.createServer(app);
-const eiows = require("eiows");
+// const eiows = require("eiows");
+// 	wsEngine: eiows.Server,
 // Local Requires
 const dbConnect = require("./lib/connection");
 const User = require("./models/user");
@@ -36,7 +37,6 @@ const {
 // IO server
 
 const io = new Server(server, {
-	wsEngine: eiows.Server,
 	pingInterval: 15000,
 	pingTimeout: 30000,
 	cors: { origin: "http://localhost:3000", methods: ["GET", "POST"] },

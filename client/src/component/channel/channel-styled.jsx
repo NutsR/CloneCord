@@ -206,7 +206,7 @@ const ChatEmpty = styled.div`
 	min-height: 0;
 	@media (max-width: 800px) {
 		position: absolute;
-		height: 100%;
+		height: 100vh;
 		margin-left: 0%;
 		width: 100%;
 	}

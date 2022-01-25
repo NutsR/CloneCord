@@ -116,7 +116,6 @@ function Channels() {
 	async function handleServerDel() {
 		if (channel.length) {
 			const id = channel[0]._id;
-			console.log(id);
 			const res = await fetch(
 				`${process.env.REACT_APP_public_url}/api/server/delete`,
 				{
