@@ -276,7 +276,9 @@
 	background-color: #393c42;
 	border-radius: 5px;
 }
-
+.highlight{
+	background-color: #4b443b !important;
+}
 .error-msg {
 	margin-top: 100px;
 	padding: 15px;

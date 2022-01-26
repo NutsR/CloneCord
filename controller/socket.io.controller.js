@@ -30,9 +30,13 @@ const joinChannel = async (socket, room) => {
 	socket.join(room);
 	socket.room = room;
 	try {
-		const history = await Channel.findById(room).lean().populate("message");
+		const history = await Message.paginate(
+			{ channel_id: room },
+			{ page: 1, limit: 30, lean: true, sort: { time: -1 } }
+		);
 		if (history) {
-			socket.emit("history", history.message);
+			history.docs.reverse();
+			socket.emit("history", history);
 		}
 	} catch (err) {
 		console.log(err);
@@ -113,6 +117,21 @@ const directMessage = async (socket, io, messageObj) => {
 	}
 };
 
+const sendPaginatedHistory = async (id, page, socket) => {
+	const history = await Message.paginate(
+		{ channel_id: id },
+		{
+			page,
+			limit: 30,
+			sort: { time: -1 },
+			lean: true,
+		}
+	);
+	if (history) {
+		history.docs.reverse();
+		socket.emit("get-history", history);
+	}
+};
 module.exports = {
 	sentMessage,
 	sentDm,
@@ -122,4 +141,5 @@ module.exports = {
 	getDms,
 	joinDm,
 	directMessage,
+	sendPaginatedHistory,
 };

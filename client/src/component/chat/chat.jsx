@@ -20,6 +20,7 @@ function Chat({ loader, setLoader }) {
 	const [show, setShow] = useState(false);
 	const messagesEndRef = useRef(null);
 	const [showUsers, setShowUsers] = useState(false);
+	const [paginate, setPaginating] = useState(false);
 	const scrollToBottom = () => {
 		messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
 	};
@@ -43,9 +44,10 @@ function Chat({ loader, setLoader }) {
 	};
 
 	useEffect(() => {
-		socket.on("history", (historyMsg) => {
-			const msgs = historyMsg.map((el) => {
+		socket.on("history", (historyObj) => {
+			const msgs = historyObj.docs.map((el) => {
 				el.time = new Date(el.time);
+				el.page = historyObj.page;
 				el.date = new Date(el.date);
 				return el;
 			});
@@ -57,11 +59,22 @@ function Chat({ loader, setLoader }) {
 			message.time = new Date(message.time);
 			setMessages((msg) => [...msg, message]);
 		});
-
-		scrollToBottom();
+		socket.on("get-history", (historyObj) => {
+			const msgs = historyObj.docs.map((message) => {
+				message.time = new Date(message.time);
+				message.page = historyObj.page;
+				return message;
+			});
+			setMessages((u) => [...msgs, ...u]);
+			setPaginating(false);
+		});
+		if (messages.length && messages[0].page <= 1) {
+			scrollToBottom();
+		}
 		return () => {
 			socket.off("receive-message");
 			socket.off("history");
+			socket.off("get-history");
 			setShow(false);
 			if (width < 800) {
 				document.getElementById("server").style.transform = "translateX(-100%)";
@@ -72,6 +85,16 @@ function Chat({ loader, setLoader }) {
 			}
 		};
 	}, [messages]);
+	console.log(messages);
+	const handleScroll = (e) => {
+		if (messages.length && e.target.scrollTop === 0) {
+			setPaginating(true);
+			socket.emit("request-history", {
+				id: selected._id,
+				page: messages[0].page + 1,
+			});
+		}
+	};
 	return (
 		<>
 			{show || (showUsers && width < 800) ? (
@@ -107,7 +130,8 @@ function Chat({ loader, setLoader }) {
 				)}
 			</Header>
 			<ChatContainer>
-				<ChatMessages>
+				<ChatMessages onScroll={handleScroll}>
+					{paginate ? <Spinner /> : null}
 					{!loader ? (
 						messages.length ? (
 							messages.map((element, i) => (
@@ -120,6 +144,10 @@ function Chat({ loader, setLoader }) {
 												messages[i - 1].time.getTime() + 2 * 60000)
 											? "continue"
 											: "message-container"
+									} ${
+										element.message.includes(`@${user.username}`)
+											? "highlight"
+											: ""
 									}`}
 								>
 									<div className="profile-pic">

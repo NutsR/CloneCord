@@ -36,7 +36,6 @@ function Channels() {
 	const [servMenu, setServMenu] = useState(false);
 	const [profile, showProfile] = useState({});
 	const [loader, setLoader] = useState(false);
-	const { width } = useWindowDimensions();
 	const channelsRef = useRef();
 	const serverRef = useRef();
 
@@ -88,30 +87,32 @@ function Channels() {
 	}, [selected]);
 
 	async function handleDelete(e) {
-		const res = await fetch(
-			`${process.env.REACT_APP_public_url}/api/channels/delete`,
-			{
-				method: "delete",
-				mode: "cors",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ id: menu.id }),
-			}
-		);
-		const data = await res.json();
-		if (data.deleted) {
-			setChannel((chan) => {
-				const newChan = chan.map((server) => {
-					server.channels = server.channels.filter((channel) => {
-						if (channel._id !== data.deleted_id) {
-							return channel;
-						}
+		if (channel.length && channel[0].channels.length > 1) {
+			const res = await fetch(
+				`${process.env.REACT_APP_public_url}/api/channels/delete`,
+				{
+					method: "delete",
+					mode: "cors",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ id: menu.id }),
+				}
+			);
+			const data = await res.json();
+			if (data.deleted) {
+				setChannel((chan) => {
+					const newChan = chan.map((server) => {
+						server.channels = server.channels.filter((channel) => {
+							if (channel._id !== data.deleted_id) {
+								return channel;
+							}
+						});
+						return server;
 					});
-					return server;
+					return newChan;
 				});
-				return newChan;
-			});
-			setMenu({});
-			channelsRef.current && (channelsRef.current.style.display = "none");
+				setMenu({});
+				channelsRef.current && (channelsRef.current.style.display = "none");
+			}
 		}
 	}
 
@@ -224,8 +225,12 @@ function Channels() {
 									</div>
 								))}
 								<ContextMenu ref={channelsRef}>
-									{menu.id && (
+									{menu.id &&
+									channel.length &&
+									channel[0].channels.length > 1 ? (
 										<div {...channelDelete}>Delete Channel (Hold)</div>
+									) : (
+										""
 									)}
 								</ContextMenu>
 							</>

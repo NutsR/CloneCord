@@ -31,6 +31,7 @@ const {
 	joinDm,
 	directMessage,
 	sentDm,
+	sendPaginatedHistory,
 } = require("./controller/socket.io.controller");
 
 // IO server
@@ -126,6 +127,10 @@ io.on("connection", (socket) => {
 	// send direct message
 	socket.on("direct-message", (messageObj) => {
 		directMessage(socket, io, messageObj);
+	});
+
+	socket.on("request-history", ({ id, page }) => {
+		sendPaginatedHistory(id, page, socket);
 	});
 });
 
