@@ -19,7 +19,7 @@ function Servers() {
 	});
 	const handleServerSel = (server) => {
 		setSelected(server.channels[0]);
-		socket.emit("join-channel", server.channels[0]);
+		socket.emit("join-channel", server.channels[0]._id);
 	};
 	const closeMenu = (e) => {
 		if (serverRef.current && !serverRef.current.contains(e.target)) {
