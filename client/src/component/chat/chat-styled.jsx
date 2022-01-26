@@ -113,7 +113,26 @@ const NoMessages = styled.div`
 	margin-top: 50%;
 	font-weight: 600;
 `;
+const Spinner = styled.div`
+	border: 13px solid #202225; /* Light grey */
+	border-top: 13px solid #36393f;
+	border-radius: 50%;
+	margin-top: auto;
+	margin-left: 45%;
+	margin-bottom: 50px;
+	width: 70px;
+	height: 70px;
+	animation: spin 1.75s linear infinite;
 
+	@keyframes spin {
+		0% {
+			transform: rotate(0deg);
+		}
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+`;
 export {
 	DmHeader,
 	DmContainer,
@@ -123,4 +142,5 @@ export {
 	ChatInput,
 	DmInput,
 	NoMessages,
+	Spinner,
 };

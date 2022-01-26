@@ -35,6 +35,7 @@ function Channels() {
 	const [menu, setMenu] = useState({});
 	const [servMenu, setServMenu] = useState(false);
 	const [profile, showProfile] = useState({});
+	const [loader, setLoader] = useState(false);
 	const { width } = useWindowDimensions();
 	const channelsRef = useRef();
 	const serverRef = useRef();
@@ -51,6 +52,7 @@ function Channels() {
 
 	const handleClick = (chan) => {
 		socket.emit("join-channel", chan._id);
+		setLoader(true);
 		if (channelsRef.current) {
 			setMenu({});
 			channelsRef.current.style.display = "none";
@@ -232,7 +234,7 @@ function Channels() {
 				<Logout />
 			</ChannelContainer>
 
-			{selected._id && <Chat />}
+			{selected._id && <Chat loader={loader} setLoader={setLoader} />}
 			<ServerUsers id="users">
 				<Online>Users- {channel.length && channel[0].users.length}</Online>
 				<div>

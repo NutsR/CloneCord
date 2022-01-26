@@ -11,11 +11,10 @@ const LocalStrategy = require("passport-local");
 const session = require("express-session");
 const cors = require("cors");
 
-// server//
+// server
 const app = express();
 const server = http.createServer(app);
 const eiows = require("eiows");
-const parser = require("socket.io-msgpack-parser");
 // Local Requires
 const dbConnect = require("./lib/connection");
 const User = require("./models/user");
@@ -44,7 +43,6 @@ const io = new Server(server, {
 	perMessageDeflate: {
 		threshold: 32768,
 	},
-	parser,
 });
 
 // Middleware and app.use //

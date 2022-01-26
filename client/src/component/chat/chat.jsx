@@ -12,8 +12,9 @@ import {
 	ChatMessages,
 	Header,
 	NoMessages,
+	Spinner,
 } from "./chat-styled";
-function Chat() {
+function Chat({ loader, setLoader }) {
 	const socket = useContext(SocketContext);
 	const { user } = useUser();
 	const [show, setShow] = useState(false);
@@ -43,13 +44,13 @@ function Chat() {
 
 	useEffect(() => {
 		socket.on("history", (historyMsg) => {
-			console.log(historyMsg);
 			const msgs = historyMsg.map((el) => {
 				el.time = new Date(el.time);
 				el.date = new Date(el.date);
 				return el;
 			});
 			setMessages(msgs);
+			setLoader(false);
 		});
 		socket.on("receive-message", (message) => {
 			console.log(message);
@@ -107,38 +108,42 @@ function Chat() {
 			</Header>
 			<ChatContainer>
 				<ChatMessages>
-					{messages.length ? (
-						messages.map((element, i) => (
-							<div
-								key={i}
-								className={` ${
-									i !== 0 &&
-									(element.user_id === messages[i - 1].user_id) &
-										(element.time.getTime() <
-											messages[i - 1].time.getTime() + 2 * 60000)
-										? "continue"
-										: "message-container"
-								}`}
-							>
-								<div className="profile-pic">
-									<img src={ProfilePng} alt="profile" />
-								</div>
-								<div className="messages">
-									<span className="username">
-										{element.username}
-										<span className="time">
-											{element.time.toLocaleTimeString()}{" "}
-											{element.time.toLocaleDateString()}
+					{!loader ? (
+						messages.length ? (
+							messages.map((element, i) => (
+								<div
+									key={i}
+									className={` ${
+										i !== 0 &&
+										(element.user_id === messages[i - 1].user_id) &
+											(element.time.getTime() <
+												messages[i - 1].time.getTime() + 2 * 60000)
+											? "continue"
+											: "message-container"
+									}`}
+								>
+									<div className="profile-pic">
+										<img src={ProfilePng} alt="profile" />
+									</div>
+									<div className="messages">
+										<span className="username">
+											{element.username}
+											<span className="time">
+												{element.time.toLocaleTimeString()}{" "}
+												{element.time.toLocaleDateString()}
+											</span>
 										</span>
-									</span>
-									<p key={i} className="msg">
-										{element.message}
-									</p>
+										<p key={i} className="msg">
+											{element.message}
+										</p>
+									</div>
 								</div>
-							</div>
-						))
+							))
+						) : (
+							<NoMessages>Create history! Send the first message</NoMessages>
+						)
 					) : (
-						<NoMessages>Create history! Send the first message</NoMessages>
+						<Spinner />
 					)}
 					<div ref={messagesEndRef} className="endRef" />
 				</ChatMessages>
