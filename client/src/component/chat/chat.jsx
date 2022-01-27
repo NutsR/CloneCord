@@ -48,12 +48,6 @@ function Chat({ loader, setLoader }) {
 		}
 	}, [messagesEndRef]);
 	useEffect(() => {
-		if (messages.length) {
-			if (!messages[0].page || messages[0].page <= 1) {
-				chatRef.current.scrollTop =
-					messagesEndRef.current.getBoundingClientRect().top;
-			}
-		}
 		socket.on("history", (historyObj) => {
 			const msgs = historyObj.docs.map((el) => {
 				el.time = new Date(el.time);
@@ -63,10 +57,11 @@ function Chat({ loader, setLoader }) {
 			});
 			setMessages(msgs);
 			setLoader(false);
+			scrollToBottom();
 		});
 		socket.on("receive-message", (message) => {
-			console.log(message);
 			message.time = new Date(message.time);
+			message.page = 1;
 			setMessages((msg) => [...msg, message]);
 			scrollToBottom();
 		});
