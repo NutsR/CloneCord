@@ -18,7 +18,7 @@ function Logout() {
 		if (logoutReq) {
 			socket.close();
 		}
-	}, [user, logoutReq]);
+	}, [user, logoutReq, socket]);
 	useEffect(() => {
 		if (logoutReq) {
 			handleLogout();

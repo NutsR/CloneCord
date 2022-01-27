@@ -50,19 +50,11 @@ function Servers() {
 				setMenu({});
 				serverRef.current.style.display = "none";
 				setUser((u) => {
-					u.server = u.server.filter((s) => {
-						if (s._id !== id) {
-							return s;
-						}
-					});
+					u.server = u.server.filter((s) => s._id !== id);
 					return u;
 				});
 				setServer((s) => {
-					const newServers = s.filter((serv) => {
-						if (serv._id !== id) {
-							return serv;
-						}
-					});
+					const newServers = s.filter((serv) => serv._id !== id);
 					return newServers;
 				});
 			}

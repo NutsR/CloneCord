@@ -37,7 +37,7 @@ function UserProvider({ children }) {
 	};
 	useEffect(() => {
 		checkLogin();
-	}, []);
+	}, [checkLogin]);
 	return (
 		<UserContext.Provider value={{ user, checkLogin, setUser, loader }}>
 			{children}

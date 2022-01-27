@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef } from "react";
+import { useCallback, useContext, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { SocketContext } from "../../hooks/socket.io.context";
 import { useUser } from "../../hooks/user";
@@ -21,11 +21,14 @@ function ProfileDropdown({ userObj, showProfile }) {
 		socket.emit("sent-dm", obj);
 	};
 	const resultsRef = useRef();
-	const handler = (event) => {
-		if (!resultsRef.current.contains(event.target)) {
-			showProfile({});
-		}
-	};
+	const handler = useCallback(
+		(event) => {
+			if (!resultsRef.current.contains(event.target)) {
+				showProfile({});
+			}
+		},
+		[resultsRef, showProfile]
+	);
 	useEffect(() => {
 		socket.on("dm-join", (dm) => {
 			socket.emit("join-dm", dm._id);
