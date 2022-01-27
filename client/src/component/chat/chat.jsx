@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useRef } from "react";
+import { useState, useEffect, useContext, useRef, useCallback } from "react";
 import { useUser } from "../../hooks/user";
 import { SocketContext } from "../../hooks/socket.io.context";
 import { useSelect } from "../../hooks/channel";
@@ -42,7 +42,11 @@ function Chat({ loader, setLoader }) {
 			}
 		}
 	};
-
+	const scrollToBottom = useCallback(() => {
+		if (messagesEndRef.current) {
+			messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+		}
+	}, [messagesEndRef]);
 	useEffect(() => {
 		if (messages.length) {
 			if (!messages[0].page || messages[0].page <= 1) {
@@ -64,6 +68,7 @@ function Chat({ loader, setLoader }) {
 			console.log(message);
 			message.time = new Date(message.time);
 			setMessages((msg) => [...msg, message]);
+			scrollToBottom();
 		});
 		socket.on("get-history", (historyObj) => {
 			if (historyObj.page !== messages[0].page) {
@@ -95,7 +100,7 @@ function Chat({ loader, setLoader }) {
 				}
 			}
 		};
-	}, [messages, setLoader, socket, width]);
+	}, [messages, setLoader, socket, width, scrollToBottom]);
 	const handleScroll = (e) => {
 		if (messages.length && e.target.scrollTop === 0) {
 			setPaginating(true);
