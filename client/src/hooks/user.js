@@ -3,7 +3,7 @@ import {
 	useState,
 	createContext,
 	useEffect,
-	useCallBack,
+	useCallback,
 } from "react";
 import { useNavigate } from "react-router-dom";
 import { SocketContext } from "./socket.io.context";
@@ -23,7 +23,7 @@ function UserProvider({ children }) {
 	const [user, setUser] = useState(initState);
 	const [loader, setLoader] = useState(true);
 
-	const checkLogin = useCallBack(async () => {
+	const checkLogin = useCallback(async () => {
 		const res = await fetch(`${process.env.REACT_APP_public_url}/api/user`, {
 			method: "GET",
 			credentials: "include",
