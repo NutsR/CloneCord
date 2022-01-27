@@ -12,9 +12,8 @@ const sentMessage = async (socket, io, data) => {
 			time: new Date(),
 		});
 		channel.messages.push(message._id);
-		message.save((err, data) => {
-			io.to(socket.room).emit("receive-message", message);
-		});
+		io.to(socket.room).emit("receive-message", message);
+		await message.save();
 		await channel.save();
 		return;
 	}
