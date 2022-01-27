@@ -13,7 +13,6 @@ const sentMessage = async (socket, io, data) => {
 		});
 		channel.messages.push(message._id);
 		message.save((err, data) => {
-			console.log(data);
 			io.to(socket.room).emit("receive-message", message);
 		});
 		await channel.save();

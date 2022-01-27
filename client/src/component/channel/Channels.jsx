@@ -50,13 +50,15 @@ function Channels() {
 	const socket = useContext(SocketContext);
 
 	const handleClick = (chan) => {
-		socket.emit("join-channel", chan._id);
-		setLoader(true);
-		if (channelsRef.current) {
-			setMenu({});
-			channelsRef.current.style.display = "none";
+		if (selected._id !== chan._id) {
+			socket.emit("join-channel", chan._id);
+			setLoader(true);
+			if (channelsRef.current) {
+				setMenu({});
+				channelsRef.current.style.display = "none";
+			}
+			setSelected(chan);
 		}
-		setSelected(chan);
 	};
 
 	const closeMenu = (e) => {

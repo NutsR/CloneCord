@@ -13,12 +13,14 @@ import {
 	Header,
 	NoMessages,
 	Spinner,
+	PaginateSpinner,
 } from "./chat-styled";
 function Chat({ loader, setLoader }) {
 	const socket = useContext(SocketContext);
 	const { user } = useUser();
 	const [show, setShow] = useState(false);
 	const messagesEndRef = useRef(null);
+	const chatRef = useRef();
 	const [showUsers, setShowUsers] = useState(false);
 	const [paginate, setPaginating] = useState(false);
 	const scrollToBottom = () => {
@@ -44,6 +46,12 @@ function Chat({ loader, setLoader }) {
 	};
 
 	useEffect(() => {
+		if (messages.length) {
+			if (!messages[0].page || messages[0].page <= 1) {
+				chatRef.current.scrollTop =
+					messagesEndRef.current.getBoundingClientRect().top;
+			}
+		}
 		socket.on("history", (historyObj) => {
 			const msgs = historyObj.docs.map((el) => {
 				el.time = new Date(el.time);
@@ -60,17 +68,22 @@ function Chat({ loader, setLoader }) {
 			setMessages((msg) => [...msg, message]);
 		});
 		socket.on("get-history", (historyObj) => {
-			const msgs = historyObj.docs.map((message) => {
-				message.time = new Date(message.time);
-				message.page = historyObj.page;
-				return message;
-			});
-			setMessages((u) => [...msgs, ...u]);
-			setPaginating(false);
+			if (historyObj.page !== messages[0].page) {
+				const msgs = historyObj.docs.map((message) => {
+					message.time = new Date(message.time);
+					message.page = historyObj.page;
+					return message;
+				});
+				const top = messagesEndRef.current.getBoundingClientRect().top;
+
+				setMessages((u) => [...msgs, ...u]);
+
+				chatRef.current.scrollTop =
+					messagesEndRef.current.getBoundingClientRect().top - top;
+				setPaginating(false);
+			}
 		});
-		if (messages.length && messages[0].page <= 1) {
-			scrollToBottom();
-		}
+
 		return () => {
 			socket.off("receive-message");
 			socket.off("history");
@@ -85,7 +98,6 @@ function Chat({ loader, setLoader }) {
 			}
 		};
 	}, [messages]);
-	console.log(messages);
 	const handleScroll = (e) => {
 		if (messages.length && e.target.scrollTop === 0) {
 			setPaginating(true);
@@ -130,8 +142,8 @@ function Chat({ loader, setLoader }) {
 				)}
 			</Header>
 			<ChatContainer>
-				<ChatMessages onScroll={handleScroll}>
-					{paginate ? <Spinner /> : null}
+				<ChatMessages onScroll={handleScroll} ref={chatRef}>
+					{paginate ? <PaginateSpinner /> : null}
 					{!loader ? (
 						messages.length ? (
 							messages.map((element, i) => (

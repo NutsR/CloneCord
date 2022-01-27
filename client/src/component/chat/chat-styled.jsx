@@ -133,6 +133,9 @@ const Spinner = styled.div`
 		}
 	}
 `;
+const PaginateSpinner = styled(Spinner)`
+	position: absolute;
+`;
 export {
 	DmHeader,
 	DmContainer,
@@ -143,4 +146,5 @@ export {
 	DmInput,
 	NoMessages,
 	Spinner,
+	PaginateSpinner,
 };
