@@ -8,7 +8,6 @@ import ProfileDropdown from "../dropdowns/profile";
 import { useUser } from "../../hooks/user";
 import useLongPress from "../../hooks/Longpress";
 import Logout from "../Login-register/logout";
-import useWindowDimensions from "../../hooks/windowSize";
 import {
 	ChannelContainer,
 	ChannelTitle,
@@ -86,7 +85,7 @@ function Channels() {
 		return () => {
 			document.removeEventListener("mousedown", closeMenu);
 		};
-	}, [selected]);
+	}, [selected, id, navigate, server]);
 
 	async function handleDelete(e) {
 		if (channel.length && channel[0].channels.length > 1) {
@@ -103,11 +102,9 @@ function Channels() {
 			if (data.deleted) {
 				setChannel((chan) => {
 					const newChan = chan.map((server) => {
-						server.channels = server.channels.filter((channel) => {
-							if (channel._id !== data.deleted_id) {
-								return channel;
-							}
-						});
+						server.channels = server.channels.filter(
+							(channel) => channel._id !== data.deleted_id
+						);
 						return server;
 					});
 					return newChan;
@@ -134,19 +131,11 @@ function Channels() {
 			if (data.success) {
 				setServMenu(false);
 				setUser((u) => {
-					u.server = u.server.filter((s) => {
-						if (s._id !== id) {
-							return s;
-						}
-					});
+					u.server = u.server.filter((s) => s._id !== id);
 					return u;
 				});
 				setServer((s) => {
-					const newServers = s.filter((serv) => {
-						if (serv._id !== id) {
-							return serv;
-						}
-					});
+					const newServers = s.filter((serv) => serv._id !== id);
 					return newServers;
 				});
 				navigate("/channels/@me");

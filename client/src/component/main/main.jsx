@@ -2,11 +2,9 @@ import { useEffect, useContext } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useUser } from "../../hooks/user";
 import Servers from "../server/servers";
-import { SocketContext } from "../../hooks/socket.io.context";
 import "../../styles/styles.css";
 
 function Main() {
-	const socket = useContext(SocketContext);
 	const { user, loader, checkLogin } = useUser();
 	const navigate = useNavigate();
 

@@ -11,7 +11,7 @@ function ServerProvider({ children }) {
 		if (user._id) {
 			setServer(user.server);
 		}
-	});
+	}, [user._id, user.server]);
 	return (
 		<ServerContext.Provider value={{ server, setServer }}>
 			{children}

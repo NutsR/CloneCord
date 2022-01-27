@@ -2,7 +2,6 @@ import { useContext, useEffect, useState, useRef } from "react";
 import { SocketContext } from "../../hooks/socket.io.context";
 import ProfilePng from "../../dist/user.png";
 import { useUser } from "../../hooks/user";
-import { useSelect } from "../../hooks/channel";
 import { useParams } from "react-router-dom";
 import { DmHeader, DmContainer, ChatMessages, DmInput } from "./chat-styled";
 function Conversations() {

@@ -37,7 +37,7 @@ function ProfileDropdown({ userObj, showProfile }) {
 			document.removeEventListener("mousedown", handler);
 			socket.off("dm-history");
 		};
-	}, [socket]);
+	}, [socket, handler, navigate]);
 	return (
 		<div className="profile-dropdown" ref={resultsRef}>
 			<div className="close-dropdown" onClick={() => showProfile({})}>

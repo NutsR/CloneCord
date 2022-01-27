@@ -1,5 +1,5 @@
 import { SocketContext } from "../../hooks/socket.io.context";
-import { useContext, useState, useEffect, useRef } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useUser } from "../../hooks/user";
 import ProfilePng from "../../dist/user.png";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
@@ -44,7 +44,7 @@ function HomeChannel() {
 				document.getElementById("server").style.transform = "translateX(-100%)";
 			}
 		};
-	}, [socket]);
+	}, [socket, user._id, show, width]);
 	return (
 		<>
 			<DirectMessages id="direct-messages">

@@ -23,9 +23,7 @@ function Chat({ loader, setLoader }) {
 	const chatRef = useRef();
 	const [showUsers, setShowUsers] = useState(false);
 	const [paginate, setPaginating] = useState(false);
-	const scrollToBottom = () => {
-		messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-	};
+
 	const [messages, setMessages] = useState([]);
 	const { selected } = useSelect();
 	const { width } = useWindowDimensions();
@@ -97,7 +95,7 @@ function Chat({ loader, setLoader }) {
 				}
 			}
 		};
-	}, [messages]);
+	}, [messages, setLoader, socket, width]);
 	const handleScroll = (e) => {
 		if (messages.length && e.target.scrollTop === 0) {
 			setPaginating(true);
