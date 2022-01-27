@@ -1,4 +1,4 @@
-#NOTE 
+# NOTE 
 remove `const eiows = require('eiows')` and `wsEngine: eiows.Server` if you are using windows for some reason it doesn't compilies those files
 # Getting Started with Create React App
 
