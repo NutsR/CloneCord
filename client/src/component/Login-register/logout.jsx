@@ -24,7 +24,7 @@ function Logout() {
 			handleLogout();
 			checkLogin();
 		}
-	}, [logoutReq, handleLogout]);
+	}, [logoutReq, handleLogout, checkLogin]);
 	return (
 		<div className="logout">
 			<div className="title">{user.username}</div>

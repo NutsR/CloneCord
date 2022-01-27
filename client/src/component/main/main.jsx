@@ -15,7 +15,7 @@ function Main() {
 				navigate("/login");
 			}
 		}
-	}, [loader, user._id, navigate]);
+	}, [loader, user._id, navigate, checkLogin]);
 	return (
 		<div className="main-container">
 			<Servers />

@@ -1,4 +1,10 @@
-import { useContext, useState, createContext, useEffect } from "react";
+import {
+	useContext,
+	useState,
+	createContext,
+	useEffect,
+	useCallBack,
+} from "react";
 import { useNavigate } from "react-router-dom";
 import { SocketContext } from "./socket.io.context";
 import { useLocation } from "react-router-dom";
@@ -17,7 +23,7 @@ function UserProvider({ children }) {
 	const [user, setUser] = useState(initState);
 	const [loader, setLoader] = useState(true);
 
-	const checkLogin = async () => {
+	const checkLogin = useCallBack(async () => {
 		const res = await fetch(`${process.env.REACT_APP_public_url}/api/user`, {
 			method: "GET",
 			credentials: "include",
@@ -34,7 +40,7 @@ function UserProvider({ children }) {
 		}
 		setUser(initState);
 		setLoader(false);
-	};
+	}, [setLoader, setUser, socket, navigate, location]);
 	useEffect(() => {
 		checkLogin();
 	}, [checkLogin]);
