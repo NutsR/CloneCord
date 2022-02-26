@@ -44,7 +44,7 @@ function HomeChannel() {
 				document.getElementById("server").style.transform = "translateX(-100%)";
 			}
 		};
-	}, [socket, user._id, show, width]);
+	}, [socket, user._id, width]);
 	return (
 		<>
 			<DirectMessages id="direct-messages">

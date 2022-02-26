@@ -68,9 +68,8 @@ function Servers() {
 					<hr className="home" />
 				</Link>
 
-				{user._id
-					? server.length &&
-					  server.map((s, i) => (
+				{user._id && server.length
+					? server.map((s, i) => (
 							<div
 								key={i}
 								onClick={() => {
